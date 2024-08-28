@@ -1,0 +1,2298 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" href="assets/1/css/assets.css" />
+    <title>Decision Rules</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/png" href="container/resources/container/favicon.ico" />
+<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jscore/core" src="./jscore/1/core.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jscore/ext/net" src="./jscore/1/ext/net.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jscore/ext/locationController" src="./jscore/1/ext/locationController.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jscore/handlebars/handlebars" src="./jscore/1/handlebars/handlebars.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jscore/ext/privateStore" src="./jscore/1/ext/privateStore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jscore/ext/dom" src="./jscore/1/ext/dom.js"></script><style>html {
+  margin: 0;
+  padding: 0;
+  font-size: 10px;
+  font-family: Arial;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+html,
+body,
+button,
+input,
+textarea,
+select {
+  font-family: Arial, Helvetica, sans-serif;
+}
+body {
+  overflow: hidden;
+}
+a {
+  color: #0066b3;
+  text-decoration: none;
+}
+.eaContainer-SystemBarHolder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 45px;
+  width: 100%;
+}
+.eaContainer-applicationHolder {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 500;
+}
+.eaContainer-applicationHolder_hidden {
+  visibility: hidden;
+}
+.eaContainer-applicationHolder_animate_fadeOut {
+  -webkit-animation: eaContainer-applicationHolder_fadeOut 0.3s ease both;
+  -moz-animation: eaContainer-applicationHolder_fadeOut 0.3s ease both;
+  animation: eaContainer-applicationHolder_fadeOut 0.3s ease both;
+}
+.eaContainer-applicationHolder_animate_fadeIn {
+  -webkit-animation: eaContainer-applicationHolder_fadeIn 0.3s ease both;
+  -moz-animation: eaContainer-applicationHolder_fadeIn 0.3s ease both;
+  animation: eaContainer-applicationHolder_fadeIn 0.3s ease both;
+}
+.eaContainer-applicationHolder_animate_moveToLeft {
+  -webkit-animation: eaContainer-applicationHolder_moveToLeft 0.3s ease both;
+  -moz-animation: eaContainer-applicationHolder_moveToLeft 0.3s ease both;
+  animation: eaContainer-applicationHolder_moveToLeft 0.3s ease both;
+  overflow: hidden;
+}
+.eaContainer-applicationHolder_animate_moveFromLeft {
+  -webkit-animation: eaContainer-applicationHolder_moveFromLeft 0.3s ease both;
+  -moz-animation: eaContainer-applicationHolder_moveFromLeft 0.3s ease both;
+  animation: eaContainer-applicationHolder_moveFromLeft 0.3s ease both;
+  overflow: hidden;
+}
+.eaContainer-applicationHolder_animate_moveToRight {
+  -webkit-animation: eaContainer-applicationHolder_moveToRight 0.3s ease both;
+  -moz-animation: eaContainer-applicationHolder_moveToRight 0.3s ease both;
+  animation: eaContainer-applicationHolder_moveToRight 0.3s ease both;
+  overflow: hidden;
+}
+.eaContainer-applicationHolder_animate_moveFromRight {
+  -webkit-animation: eaContainer-applicationHolder_moveFromRight 0.3s ease both;
+  -moz-animation: eaContainer-applicationHolder_moveFromRight 0.3s ease both;
+  animation: eaContainer-applicationHolder_moveFromRight 0.3s ease both;
+  overflow: hidden;
+}
+.eaContainer-Spinner {
+  display: none;
+  position: absolute;
+  top: 45px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  text-align: center;
+  opacity: 0;
+  z-index: -1000;
+}
+.eaContainer-Spinner &gt; div {
+  position: absolute;
+  top: calc(50% - 36px);
+  left: calc(50% - 28px);
+}
+.eaContainer-container-loading .eaContainer-applicationHolder {
+  opacity: 0;
+}
+.eaContainer-container-loading .eaContainer-Spinner {
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.1s linear;
+  -moz-transition-delay: 1s;
+  -webkit-transition-delay: 1s;
+  transition-delay: 1s;
+}
+@media print {
+  .eaContainer-SystemBar {
+    display: none;
+  }
+  .eaContainer-applicationHolder {
+    top: inherit;
+    overflow-y: inherit;
+    position: relative;
+  }
+}
+/* move from / to  */
+@-webkit-keyframes eaContainer-applicationHolder_moveToLeft {
+  to {
+    -webkit-transform: translateX(-150%);
+  }
+}
+@-moz-keyframes eaContainer-applicationHolder_moveToLeft {
+  to {
+    -moz-transform: translateX(-150%);
+  }
+}
+@keyframes eaContainer-applicationHolder_moveToLeft {
+  to {
+    transform: translateX(-150%);
+  }
+}
+@-webkit-keyframes eaContainer-applicationHolder_moveFromLeft {
+  from {
+    -webkit-transform: translateX(-150%);
+  }
+}
+@-moz-keyframes eaContainer-applicationHolder_moveFromLeft {
+  from {
+    -moz-transform: translateX(-150%);
+  }
+}
+@keyframes eaContainer-applicationHolder_moveFromLeft {
+  from {
+    transform: translateX(-150%);
+  }
+}
+@-webkit-keyframes eaContainer-applicationHolder_moveToRight {
+  to {
+    -webkit-transform: translateX(150%);
+  }
+}
+@-moz-keyframes eaContainer-applicationHolder_moveToRight {
+  to {
+    -moz-transform: translateX(150%);
+  }
+}
+@keyframes eaContainer-applicationHolder_moveToRight {
+  to {
+    transform: translateX(150%);
+  }
+}
+@-webkit-keyframes eaContainer-applicationHolder_moveFromRight {
+  from {
+    -webkit-transform: translateX(150%);
+  }
+}
+@-moz-keyframes eaContainer-applicationHolder_moveFromRight {
+  from {
+    -moz-transform: translateX(150%);
+  }
+}
+@keyframes eaContainer-applicationHolder_moveFromRight {
+  from {
+    transform: translateX(150%);
+  }
+}
+/* Fade out / in */
+@-webkit-keyframes eaContainer-applicationHolder_fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+@-moz-keyframes eaContainer-applicationHolder_fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes eaContainer-applicationHolder_fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes eaContainer-applicationHolder_fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+@-moz-keyframes eaContainer-applicationHolder_fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes eaContainer-applicationHolder_fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+/*Intro page css*/
+.ebIntroPage {
+  position: absolute;
+  display: table;
+  top: 45px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  vertical-align: middle;
+  width: 100%;
+  height: 100%;
+  height: -moz-calc(100% - 45px);
+  height: -webkit-calc(100% - 45px);
+  height: -o-calc(100% - 45px);
+  height: calc(100% - 45px);
+}
+.ebIntroPage-boxHolder {
+  position: relative;
+  display: table-cell;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+}
+.ebIntroPage-textBox {
+  position: relative;
+  display: block;
+  vertical-align: middle;
+  padding: 50px;
+  max-width: 500px;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 3px;
+}
+.ebIntroPage-header {
+  position: relative;
+  border-bottom: 1px solid #CCCCCC;
+  margin-bottom: 20px;
+  padding-bottom: 30px;
+}
+.ebIntroPage-header-text {
+  position: absolute;
+  left: 250px;
+  right: 0;
+  bottom: 30px;
+  margin-left: 15px;
+  padding: 0;
+  font-weight: bold;
+}
+.ebIntroPage-icon {
+  position: relative;
+  display: inline-block;
+  background: no-repeat center;
+}
+.ebIntroPage-icon-header {
+  width: 235px;
+  height: 128px;
+  background-image: url("container/resources/container/Intro_text.svg");
+}
+.ebIntroPage-icon-question,
+.ebIntroPage-icon-arrow {
+  vertical-align: top;
+  width: 24px;
+  height: 24px;
+}
+.ebIntroPage-icon-arrow {
+  background-image: url("container/resources/container/Intro_arrow.svg");
+}
+.ebIntroPage-icon-question {
+  background-image: url("container/resources/container/Intro_question.svg");
+}
+.ebIntroPage-body h2 {
+  border: none;
+  padding: 0;
+  padding-bottom: 15px;
+}
+.ebIntroPage-body-part {
+  position: relative;
+  display: inline-block;
+  width: 45%;
+}
+.ebIntroPage-body-part:not(:first-child) {
+  margin-left: 9%;
+}
+.ebIntroPage-body-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 10px;
+  width: -moz-calc(100% - 40px);
+  width: -webkit-calc(100% - 40px);
+  width: -o-calc(100% - 40px);
+  width: calc(100% - 40px);
+}
+@media screen and (max-width: 500px) {
+  .ebIntroPage-textBox {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 400px;
+  }
+}
+.eaContainer-SystemBarComponent {
+  position: relative;
+  display: inline-block;
+}
+.eaContainer-SystemBarComponent_invisible {
+  display: none;
+}
+.eaContainer-SystemBarComponent-body {
+  border-left: solid 1px #D2D2D2;
+  line-height: 40px;
+  vertical-align: top;
+  padding: 0 10px 0 10px;
+  cursor: pointer;
+}
+.eaContainer-SystemBarComponent-icon {
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  background-repeat: no-repeat;
+}
+.eaContainer-SystemBarComponent-arrow {
+  background: url('container/resources/container/component_arrow.svg');
+  height: 16px;
+  width: 12px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.eaContainer-SystemBarComponent-caption {
+  vertical-align: middle;
+  padding-left: 5px;
+}
+.eaContainer-SystemBarComponent:hover,
+.eaContainer-SystemBarComponent_pressed {
+  background-color: #e8e8e8;
+}
+.eaContainer-SystemBarComponent-list {
+  position: absolute;
+  right: 0;
+  display: none;
+  padding: 4px 0;
+  margin: 0;
+  list-style: none;
+  background-color: white;
+  border: #bfbfbf solid 1px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+.eaContainer-SystemBarComponent-listSeparator {
+  height: 1px;
+  margin: 0.4rem;
+  background-color: #E6E6E6;
+}
+.eaContainer-SystemBarComponent-listHeader {
+  margin: 0px 0.8rem;
+  line-height: 24px;
+  font-size: 1.2rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  border-bottom: 1px solid #333;
+  font-weight: bold;
+}
+.eaContainer-SystemBarComponent-listHeaderSpan {
+  vertical-align: middle;
+}
+.eaContainer-SystemBarComponent-listItem {
+  padding: 0px 0.8rem;
+  line-height: 24px;
+  font-size: 1.2rem;
+  background-color: white;
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.eaContainer-SystemBarComponent-listItemIcon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.eaContainer-SystemBarComponent-listItemAnchor {
+  display: inline-block;
+  vertical-align: middle;
+  text-decoration: none !important;
+  width: 100%;
+  color: #333;
+}
+.eaContainer-SystemBarComponent-listItemAnchor:hover {
+  color: #333;
+}
+.eaContainer-SystemBarComponent-listItem:hover {
+  background-color: #e6f0f7;
+}
+.eaContainer-SystemBarComponent-listItem:active {
+  background-color: #cce0f0;
+}
+.eaContainer-SystemBarComponent-list_hasIcons .eaContainer-SystemBarComponent-listItemAnchor {
+  width: calc(100% - 28px);
+}
+.eaContainer-SystemBar_resolution_medium .eaContainer-SystemBarComponent-caption {
+  display: none !important;
+}
+.eaContainer-SystemBar_resolution_small .eaContainer-SystemBarComponent-caption {
+  display: none !important;
+}
+.eaContainer-SystemBar_resolution_small .eaContainer-SystemBarComponent:not(.eaContainer-SystemBarComponent_fixed) {
+  display: none !important;
+}
+</style><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="config" src="./config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="navigation/config" src="./navigation/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="navigation" data-requiremodule="i18n/main" src="./i18n/2/main.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="navigation" data-requiremodule="container/api" src="./container/api.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="navigation" data-requiremodule="jscore/core" src="./jscore/1/core.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="navigation" data-requiremodule="jscore/ext/dom" src="./jscore/1/ext/dom.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="navigation" data-requiremodule="jscore/ext/privateStore" src="./jscore/1/ext/privateStore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="navigation" data-requiremodule="navigation/Navigation" src="./navigation/Navigation.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="navigation" data-requiremodule="jscore/handlebars/handlebars" src="./jscore/1/handlebars/handlebars.js"></script><style>.eaNavigation {
+  position: absolute;
+  top: 45px;
+  bottom: 0;
+  left: 0;
+  background-color: #4a4948;
+  z-index: 501;
+}
+margin-left .eaNavigation:not(.eaNavigation_expanded) .eaNavigation-button:first-child {
+  display: none;
+}
+.eaNavigation_expanded .eaNavigation-button:last-child {
+  display: none;
+}
+.eaNavigation-panel {
+  box-sizing: border-box;
+  overflow: hidden;
+  height: 100%;
+}
+.eaNavigation-panelContents {
+  height: 100%;
+  width: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+.eaNavigation-panel-separator {
+  margin-top: 20px 0;
+  background-color: #fff;
+  opacity: 0.3;
+  height: 1px;
+}
+.eaNavigation-panel-homeLink {
+  display: block;
+  padding: 10px 10px 10px 12px;
+}
+.eaNavigation-panel-homeLink:hover {
+  color: white;
+}
+.eaNavigation-panel-homeText {
+  font-size: 14px;
+  color: white;
+  vertical-align: middle;
+  width: calc(100% - 32px);
+  display: inline-block;
+}
+.eaNavigation-panel-homeIcon {
+  background: url('navigation/resources/navigation/home.svg');
+  background-size: 100%;
+  vertical-align: middle;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  margin-right: 8px;
+}
+.eaNavigation-panel-toplist {
+  font-size: 14px;
+  color: white;
+  vertical-align: middle;
+  padding-bottom: 12px;
+}
+.eaNavigation-panelContentsWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+.eaNavigation-panel-page {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+.eaNavigation-panel-page-title {
+  line-height: 40px;
+  font-size: 16px;
+  color: white;
+  padding-left: 14px;
+}
+.eaNavigation-panel-page-content {
+  max-height: calc(100% - 33px);
+  overflow-y: auto;
+}
+.eaNavigation-panel-page-main {
+  opacity: 1;
+  transition: opacity 0.3s linear;
+}
+.eaNavigation-panel-page-side {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s linear;
+}
+.eaNavigation_showSecondPage .eaNavigation-panel-page-main {
+  pointer-events: none;
+  opacity: 0;
+}
+.eaNavigation_showSecondPage .eaNavigation-panel-page-side {
+  pointer-events: inherit;
+  opacity: 1;
+}
+.eaNavigation-button-holder {
+  position: absolute;
+  right: 0;
+  transition: right 0.1s linear;
+  top: 46px;
+  z-index: 501;
+  border-radius: 0px 3px 3px 0;
+  background-color: #4a4948;
+  height: 25px;
+  width: 24px;
+  padding-top: 10px;
+  cursor: pointer;
+}
+.eaNavigation-button-holder .ebIcon {
+  margin-left: 4px;
+}
+.eaNavigation-button-holder_showing {
+  right: -24px;
+}
+.eaNavigation-button-holder:hover {
+  background-color: #555554;
+}
+.eaNavigation-panel-switch {
+  line-height: 30px;
+  color: white;
+  cursor: pointer;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.eaNavigation-panel-switch:hover {
+  background-color: #60605f;
+}
+.eaNavigation-panel-switchText {
+  vertical-align: middle;
+}
+.eaNavigation-panel-switchText {
+  padding-left: 8px;
+}
+/* Desktop Mode, squashes the app on the right */
+.eaNavigation {
+  margin-left: -280px;
+  transition: margin-left 0.4s ease;
+}
+.eaNavigation .eaNavigation-button:first-child {
+  display: none;
+}
+.eaNavigation .eaNavigation-button:last-child {
+  display: block;
+}
+.eaNavigation_expanded {
+  margin-left: 0;
+}
+.eaNavigation_expanded .eaNavigation-button:first-child {
+  display: block;
+}
+.eaNavigation_expanded .eaNavigation-button:last-child {
+  display: none;
+}
+/* Tablet Mode, goes on top of the app */
+@media screen and (max-width: 768px) {
+  .eaNavigation {
+    margin-left: -288px;
+    transition: margin-left 0.4s ease;
+  }
+  .eaNavigation_expanded {
+    margin-left: 0;
+  }
+}
+/* Phone Mode, goes on top of the app */
+@media screen and (max-width: 480px) {
+  .eaNavigation {
+    margin-left: -292px;
+    transition: margin-left 0.4s ease;
+  }
+  .eaNavigation_expanded {
+    margin-left: 0;
+  }
+}
+@media print {
+  .eaNavigation-button-holder {
+    display: none;
+  }
+}
+.eaNavigation-panel-page-content {
+  -webkit-overflow-scrolling: touch;
+}
+.eaNavigation-panel-page-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.eaNavigation-panel-page-content::-webkit-scrollbar-track {
+  background-color: #6b6b6a;
+  border: 1px solid transparent;
+  background-clip: content-box;
+  border-radius: 10px;
+}
+.eaNavigation-panel-page-content::-webkit-scrollbar-thumb {
+  background-color: #a4a4a3;
+  border-radius: 10px;
+  transition: all 0.2s linear;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+.eaNavigation-panel-page-content::-webkit-scrollbar-thumb:hover {
+  background-color: #8d8d8d;
+}
+.eaNavigation-panel-page-content::-webkit-scrollbar-button {
+  width: 8px;
+  height: 12px;
+  background-repeat: no-repeat;
+}
+.eaNavigation-panel-page-content::-webkit-scrollbar-button:vertical:decrement {
+  background-position: center 4px;
+  background-image: url("data:image/svg+xml;utf8,&lt;svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='8px' height='5px' viewBox='0 0 8 5' enable-background='new 0 0 8 5' xml:space='preserve'&gt;&lt;path fill='#8d8d8d' d='M0.293,3.293l3-3C3.488,0.098,3.744,0,4,0s0.512,0.098,0.707,0.293l3,3c0.391,0.391,0.391,1.023,0,1.414 s-1.023,0.391-1.414,0L4,2.414L1.707,4.707c-0.391,0.391-1.023,0.391-1.414,0S-0.098,3.684,0.293,3.293z'/&gt;&lt;/svg&gt;");
+}
+.eaNavigation-panel-page-content::-webkit-scrollbar-button:vertical:increment {
+  background-position: center 3px;
+  background-image: url("data:image/svg+xml;utf8,&lt;svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='8px' height='5px' viewBox='0 0 8 5' enable-background='new 0 0 8 5' xml:space='preserve'&gt;&lt;path fill='#8d8d8d' d='M7.707,1.707l-3,3C4.512,4.902,4.255,5,4,5S3.488,4.902,3.292,4.707l-3-3c-0.391-0.391-0.391-1.023,0-1.414 s1.023-0.391,1.414,0L4,2.586l2.293-2.293c0.391-0.391,1.023-0.391,1.414,0S8.098,1.316,7.707,1.707z'/&gt;&lt;/svg&gt;");
+}
+.eaNavigation-panel-page-content::-webkit-scrollbar-button:horizontal:decrement {
+  background-position: left center;
+  background-image: url("data:image/svg+xml;utf8,&lt;svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='5px' height='8px' viewBox='0 0 5 8' enable-background='new 0 0 5 8' xml:space='preserve'&gt;&lt;defs&gt;&lt;/defs&gt;&lt;path fill='#8d8d8d' d='M4.707,6.293c0.391,0.391,0.391,1.023,0,1.414C4.512,7.902,4.256,8,4,8S3.488,7.902,3.293,7.707l-3-3 C0.105,4.52,0,4.266,0,4s0.105-0.52,0.293-0.707l3-3c0.391-0.391,1.023-0.391,1.414,0c0.391,0.39,0.391,1.023,0,1.414L2.414,4 L4.707,6.293z'/&gt;&lt;/svg&gt;");
+}
+.eaNavigation-panel-page-content::-webkit-scrollbar-button:horizontal:increment {
+  background-position: right center;
+  background-image: url("data:image/svg+xml;utf8,&lt;svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='5px' height='8px' viewBox='0 0 5 8' enable-background='new 0 0 5 8' xml:space='preserve'&gt;&lt;defs&gt;&lt;/defs&gt;&lt;path fill='#8d8d8d' d='M0.293,1.707c-0.391-0.391-0.391-1.023,0-1.414C0.488,0.098,0.744,0,1,0s0.512,0.098,0.707,0.293l3,3 C4.895,3.48,5,3.734,5,4s-0.105,0.52-0.293,0.707l-3,3c-0.391,0.391-1.023,0.391-1.414,0s-0.391-1.023,0-1.414L2.586,4L0.293,1.707z'/&gt;&lt;/svg&gt;");
+}
+</style><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="contextmenu/config" src="./contextmenu/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="container/api" src="./container/api.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="jscore/core" src="./jscore/1/core.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="jscore/ext/dom" src="./jscore/1/ext/dom.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="jscore/ext/privateStore" src="./jscore/1/ext/privateStore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="contextmenu/ContextMenu" src="./contextmenu/ContextMenu.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="jscore/ext/utils" src="./jscore/1/ext/utils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="widgets/ItemsControl" src="./widgets/1/ItemsControl.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="widgets/WidgetCore" src="./widgets/1/WidgetCore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="widgets/utils/domUtils" src="./widgets/1/utils/domUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="jscore/handlebars/handlebars" src="./jscore/1/handlebars/handlebars.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="widgets/utils/parserUtils" src="./widgets/1/utils/parserUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="widgets/Dialog" src="./widgets/1/Dialog.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="jscore/base/jquery" src="./jscore/1/base/jquery.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="contextmenu" data-requiremodule="widgets/Button" src="./widgets/1/Button.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="flyout/config" src="./flyout/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="flyout" data-requiremodule="container/api" src="./container/api.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="flyout" data-requiremodule="jscore/core" src="./jscore/1/core.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="flyout" data-requiremodule="jscore/ext/dom" src="./jscore/1/ext/dom.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="flyout" data-requiremodule="jscore/ext/privateStore" src="./jscore/1/ext/privateStore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="flyout" data-requiremodule="flyout/Flyout" src="./flyout/Flyout.js"></script><style>.eaFlyout {
+  position: absolute;
+  top: 45px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: 0.3s background-color;
+  background-color: rgba(255, 255, 255, 0);
+  overflow: hidden;
+  z-index: 500;
+  display: none;
+}
+.eaFlyout-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-color: #fff;
+  border-left: 2px solid #ddd;
+  padding: 16px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  max-width: 80%;
+  right: 0;
+}
+.eaFlyout-panelHeader {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: calc(100% - 20px);
+}
+.eaFlyout-panelContents {
+  position: absolute;
+  padding: 2px;
+  top: 56px;
+  right: 16px;
+  left: 16px;
+  bottom: 10px;
+  overflow: auto;
+}
+.eaFlyout-panel_animate {
+  transition: 0.3s right ease-in-out, 0.3s opacity ease-in-out;
+}
+.eaFlyout_show {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+.eaFlyout-panelCloseIcon {
+  float: right;
+  cursor: pointer;
+  margin-top: 7px;
+}
+</style><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="helpbutton/config" src="./helpbutton/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="i18n/main" src="./i18n/2/main.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="container/api" src="./container/api.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="jscore/core" src="./jscore/1/core.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="jscore/ext/dom" src="./jscore/1/ext/dom.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="jscore/ext/privateStore" src="./jscore/1/ext/privateStore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="helpbutton/HelpButton" src="./helpbutton/HelpButton.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="helplib/HelpPopup" src="./helplib/2/HelpPopup.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="jscore/ext/net" src="./jscore/1/ext/net.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="helplib/Repository" src="./helplib/2/Repository.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="container/SystemBarComponent" src="./container/SystemBarComponent.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="widgets/Dialog" src="./widgets/1/Dialog.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="helplib/Path" src="./helplib/2/Path.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="widgets/WidgetCore" src="./widgets/1/WidgetCore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="jscore/handlebars/handlebars" src="./jscore/1/handlebars/handlebars.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="widgets/Button" src="./widgets/1/Button.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="widgets/utils/parserUtils" src="./widgets/1/utils/parserUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="widgets/utils/domUtils" src="./widgets/1/utils/domUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="jscore/ext/utils" src="./jscore/1/ext/utils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="jscore/base/jquery" src="./jscore/1/base/jquery.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="helplib/HelpRender" src="./helplib/2/HelpRender.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="helplib/Network" src="./helplib/2/Network.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="helplib/DITATransforms" src="./helplib/2/DITATransforms.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="helplib/Transformer" src="./helplib/2/Transformer.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="helpbutton" data-requiremodule="helplib/config" src="./helplib/2/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="sap-logout/config" src="./sap-logout/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="i18n/main" src="./i18n/2/main.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="container/api" src="./container/api.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="jscore/core" src="./jscore/1/core.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="jscore/ext/dom" src="./jscore/1/ext/dom.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="jscore/ext/privateStore" src="./jscore/1/ext/privateStore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="sap-logout/LogoutButton" src="./sap-logout/LogoutButton.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="container/SystemBarComponent" src="./container/SystemBarComponent.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="eso-commonlib/Constants" src="./eso-commonlib/1/Constants.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="eso-commonlib/UrlConstants" src="./eso-commonlib/1/UrlConstants.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="eso-commonlib/DialogUtils" src="./eso-commonlib/1/DialogUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="eso-commonlib/Utils" src="./eso-commonlib/1/Utils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="eso-commonlib/config" src="./eso-commonlib/1/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="widgets/Dialog" src="./widgets/1/Dialog.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="widgets/Notification" src="./widgets/1/Notification.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="widgets/InlineMessage" src="./widgets/1/InlineMessage.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="eso-commonlib/HttpConstants" src="./eso-commonlib/1/HttpConstants.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="widgets/WidgetCore" src="./widgets/1/WidgetCore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="jscore/handlebars/handlebars" src="./jscore/1/handlebars/handlebars.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="widgets/Button" src="./widgets/1/Button.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="widgets/utils/parserUtils" src="./widgets/1/utils/parserUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="widgets/utils/domUtils" src="./widgets/1/utils/domUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="jscore/ext/utils" src="./jscore/1/ext/utils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-logout" data-requiremodule="jscore/base/jquery" src="./jscore/1/base/jquery.js"></script><style>.eaContainer-LoaderOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  outline: none;
+  transition: 0.3s background-color;
+  background-color: rgba(255, 255, 255, 0);
+}
+.eaContainer-LoaderOverlay_show {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+.eaContainer-LoaderOverlay-content {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: calc(50% - 20px);
+}
+.eaContainer-LoaderOverlay-message {
+  color: #953882;
+}
+</style><style>.eaContainer-LoaderAnimation {
+  width: 56px;
+  height: 16px;
+  white-space: nowrap;
+  text-align: center;
+  display: inline-block;
+  font-size: 0;
+}
+.eaContainer-LoaderAnimation-block {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background-color: #ca9bc1;
+  margin-right: 4px;
+  display: inline-block;
+  animation: eaContainer-LoaderAnimation-block 1s ease both;
+  animation-iteration-count: infinite;
+}
+.eaContainer-LoaderAnimation-block:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.eaContainer-LoaderAnimation-block:nth-child(3) {
+  animation-delay: 0.6s;
+}
+@keyframes eaContainer-LoaderAnimation-block {
+  30% {
+    background-color: #953882;
+  }
+  45% {
+    background-color: #ca9bc1;
+  }
+}
+</style><style>.eaContainer-SystemBar {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.2rem;
+  position: relative;
+  width: 100%;
+  height: 40px;
+  z-index: 1500;
+  border-top: 4px solid #0066b3;
+  white-space: nowrap;
+  background: #f0f0f0;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #f0f0f0));
+  background: -ms-linear-gradient(top, #ffffff, #f0f0f0);
+  background: -o-linear-gradient(center top, #ffffff 0%, #f0f0f0 100%);
+  background: -webkit-linear-gradient(center top, #ffffff 0%, #f0f0f0 100%);
+  background: -moz-linear-gradient(center top, #ffffff 0%, #f0f0f0 100%);
+  background: linear-gradient(center top, #ffffff 0%, #f0f0f0 100%);
+  -webkit-box-shadow: 0 2px 2px #D2D2D2;
+  -moz-box-shadow: 0 2px 2px #D2D2D2;
+  box-shadow: 0 2px 2px #D2D2D2;
+}
+.eaContainer-SystemBar::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  font-size: 0;
+  top: -4px;
+  left: 0;
+  background: #0066b3;
+  background: -o-linear-gradient(left, #a2c517 10%, #009046 30%, #0082b6 50%, #151f77 70%, #db0050 100%);
+  background: -moz-linear-gradient(left, #a2c517 10%, #009046 30%, #0082b6 50%, #151f77 70%, #db0050 100%);
+  background: -webkit-linear-gradient(left, #a2c517 10%, #009046 30%, #0082b6 50%, #151f77 70%, #db0050 100%);
+  background: -ms-linear-gradient(left, #a2c517 10%, #009046 30%, #0082b6 50%, #151f77 70%, #db0050 100%);
+  background: -webkit-gradient(linear, left top, right top, color-stop(0.1, #a2c517), color-stop(0.3, #009046), color-stop(0.5, #0082b6), color-stop(0.7, #151f77), color-stop(1, #db0050));
+  background: linear-gradient(left, #a2c517 10%, #009046 30%, #0082b6 50%, #151f77 70%, #db0050 100%);
+}
+.eaContainer-SystemBar-name {
+  display: inline-block;
+  padding: 0 5px 0 0;
+  margin: 0;
+  font-size: 1.4em;
+  line-height: 40px;
+  color: #58585A;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  position: absolute;
+  left: 40px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.eaContainer-SystemBar-nameValue {
+  font-size: 16.8px;
+  color: #58585A;
+}
+.eaContainer-SystemBar-nameValue:hover {
+  color: #58585A;
+}
+.eaContainer-SystemBar-nameValue:focus {
+  text-decoration: none;
+  outline: none;
+}
+.eaContainer-SystemBar-logoAnchor {
+  outline: none;
+}
+.eaContainer-SystemBar-logo {
+  height: 40px;
+  display: inline-block;
+  background: url('container/resources/container/elogo.svg') no-repeat center center transparent;
+  width: 40px;
+  background-size: 20px 20px;
+}
+.eaContainer-SystemBar-left {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+.eaContainer-SystemBar-right {
+  float: right;
+}
+a.eaContainer-SystemBar-nameValue:hover {
+  text-decoration: none !important;
+}
+@media screen and (max-width: 500px) {
+  .eaContainer-SystemBar {
+    z-index: 1000;
+  }
+}
+</style><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="sap-execution-log/config" src="./sap-execution-log/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="i18n/main" src="./i18n/2/main.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="sap-decision-rules/config" src="./sap-decision-rules/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="i18n/main" src="./i18n/2/main.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="container/api" src="./container/api.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="jscore/core" src="./jscore/1/core.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="jscore/ext/dom" src="./jscore/1/ext/dom.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="jscore/ext/privateStore" src="./jscore/1/ext/privateStore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="sap-execution-log/SapExecutionLog" src="./sap-execution-log/SapExecutionLog.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Loader" src="./widgets/1/Loader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/Utils" src="./eso-commonlib/1/Utils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="layouts/TopSection" src="./layouts/1/TopSection.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/Constants" src="./eso-commonlib/1/Constants.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="uit/main" src="./uit/0/main.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Tabs" src="./widgets/1/Tabs.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/JsonDisplayer" src="./eso-commonlib/1/JsonDisplayer.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/AjaxService" src="./eso-commonlib/1/AjaxService.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/HttpConstants" src="./eso-commonlib/1/HttpConstants.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/UrlConstants" src="./eso-commonlib/1/UrlConstants.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/DialogUtils" src="./eso-commonlib/1/DialogUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/StatusCell" src="./eso-commonlib/1/StatusCell.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/RawMessageCell" src="./eso-commonlib/1/RawMessageCell.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/GeneralPaginatedLayoutTable" src="./eso-commonlib/1/GeneralPaginatedLayoutTable.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/RefreshWidget" src="./eso-commonlib/1/RefreshWidget.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/LastRefreshedLabel" src="./eso-commonlib/1/LastRefreshedLabel.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/config" src="./eso-commonlib/1/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="jscore/handlebars/handlebars" src="./jscore/1/handlebars/handlebars.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Dialog" src="./widgets/1/Dialog.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Notification" src="./widgets/1/Notification.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/InlineMessage" src="./widgets/1/InlineMessage.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Breadcrumb" src="./widgets/1/Breadcrumb.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Dropdown" src="./widgets/1/Dropdown.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="jscore/ext/utils" src="./jscore/1/ext/utils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="jscore/ext/utils/base/underscore" src="./jscore/1/ext/utils/base/underscore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/ItemsControl" src="./widgets/1/ItemsControl.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="jscore/base/jquery" src="./jscore/1/base/jquery.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/NetAjaxInterceptor" src="./eso-commonlib/1/NetAjaxInterceptor.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/BoldFontCell" src="./eso-commonlib/1/BoldFontCell.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/JSONValueCell" src="./eso-commonlib/1/JSONValueCell.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Tree" src="./widgets/1/Tree.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/Table" src="./tablelib/0/Table.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Accordion" src="./widgets/1/Accordion.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/NoHeader" src="./tablelib/0/plugins/NoHeader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/utils/parserUtils" src="./widgets/1/utils/parserUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/Cell" src="./tablelib/0/Cell.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/WidgetCore" src="./widgets/1/WidgetCore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Button" src="./widgets/1/Button.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/utils/domUtils" src="./widgets/1/utils/domUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="eso-commonlib/TableSettingsUpdater" src="./eso-commonlib/1/TableSettingsUpdater.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/layouts/PaginatedTable" src="./tablelib/0/layouts/PaginatedTable.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/TableSettings" src="./tablelib/0/TableSettings.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/ColorBand" src="./tablelib/0/plugins/ColorBand.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/ExpandableRows" src="./tablelib/0/plugins/ExpandableRows.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/Selection" src="./tablelib/0/plugins/Selection.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/ResizableHeader" src="./tablelib/0/plugins/ResizableHeader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/SmartTooltips" src="./tablelib/0/plugins/SmartTooltips.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/StickyHeader" src="./tablelib/0/plugins/StickyHeader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/StickyScrollbar" src="./tablelib/0/plugins/StickyScrollbar.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/RowEvents" src="./tablelib/0/plugins/RowEvents.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/SortableHeader" src="./tablelib/0/plugins/SortableHeader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/FixedHeader" src="./tablelib/0/plugins/FixedHeader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="layouts/Form" src="./layouts/1/Form.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="jscore/ext/net" src="./jscore/1/ext/net.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/tree/Item" src="./widgets/1/tree/Item.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/tree/Resolver" src="./widgets/1/tree/Resolver.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/Row" src="./tablelib/0/Row.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/HeaderCell" src="./tablelib/0/HeaderCell.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/plugins/PinColumns" src="./tablelib/0/plugins/PinColumns.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Pagination" src="./widgets/1/Pagination.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/SelectBox" src="./widgets/1/SelectBox.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="tablelib/config" src="./tablelib/0/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/InfoPopup" src="./widgets/1/InfoPopup.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/MultiSelectBox" src="./widgets/1/MultiSelectBox.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Combobox" src="./widgets/1/Combobox.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/ComboMultiSelect" src="./widgets/1/ComboMultiSelect.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Switcher" src="./widgets/1/Switcher.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/Spinner" src="./widgets/1/Spinner.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/PopupDatePicker" src="./widgets/1/PopupDatePicker.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/DatePicker" src="./widgets/1/DatePicker.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/TimePicker" src="./widgets/1/TimePicker.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/utils/datePickerUtils" src="./widgets/1/utils/datePickerUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="i18n/AdvancedDateTime" src="./i18n/2/AdvancedDateTime.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-execution-log" data-requiremodule="widgets/utils/dataNameUtils" src="./widgets/1/utils/dataNameUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="container/api" src="./container/api.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="jscore/core" src="./jscore/1/core.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="jscore/ext/dom" src="./jscore/1/ext/dom.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="jscore/ext/privateStore" src="./jscore/1/ext/privateStore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="sap-decision-rules/SapDecisionRules" src="./sap-decision-rules/SapDecisionRules.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/Loader" src="./widgets/1/Loader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/Utils" src="./eso-commonlib/1/Utils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="layouts/TopSection" src="./layouts/1/TopSection.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/Constants" src="./eso-commonlib/1/Constants.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="uit/main" src="./uit/0/main.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/AjaxService" src="./eso-commonlib/1/AjaxService.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/HttpConstants" src="./eso-commonlib/1/HttpConstants.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/UrlConstants" src="./eso-commonlib/1/UrlConstants.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/DialogUtils" src="./eso-commonlib/1/DialogUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="formvalidator/Validator" src="./formvalidator/0/Validator.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/Dialog" src="./widgets/1/Dialog.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/InlineMessage" src="./widgets/1/InlineMessage.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="layouts/Form" src="./layouts/1/Form.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="jscore/handlebars/handlebars" src="./jscore/1/handlebars/handlebars.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/StatusCell" src="./eso-commonlib/1/StatusCell.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/GeneralPaginatedLayoutTable" src="./eso-commonlib/1/GeneralPaginatedLayoutTable.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/RefreshWidget" src="./eso-commonlib/1/RefreshWidget.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/LastRefreshedLabel" src="./eso-commonlib/1/LastRefreshedLabel.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/NetAjaxInterceptor" src="./eso-commonlib/1/NetAjaxInterceptor.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/Breadcrumb" src="./widgets/1/Breadcrumb.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/Dropdown" src="./widgets/1/Dropdown.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="jscore/ext/utils" src="./jscore/1/ext/utils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="jscore/ext/utils/base/underscore" src="./jscore/1/ext/utils/base/underscore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/ItemsControl" src="./widgets/1/ItemsControl.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="jscore/base/jquery" src="./jscore/1/base/jquery.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/config" src="./eso-commonlib/1/config.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/Notification" src="./widgets/1/Notification.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/WidgetCore" src="./widgets/1/WidgetCore.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/Button" src="./widgets/1/Button.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/utils/parserUtils" src="./widgets/1/utils/parserUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/utils/domUtils" src="./widgets/1/utils/domUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/Cell" src="./tablelib/0/Cell.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/TableSettingsUpdater" src="./eso-commonlib/1/TableSettingsUpdater.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/layouts/PaginatedTable" src="./tablelib/0/layouts/PaginatedTable.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/TableSettings" src="./tablelib/0/TableSettings.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/ColorBand" src="./tablelib/0/plugins/ColorBand.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/ExpandableRows" src="./tablelib/0/plugins/ExpandableRows.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/Selection" src="./tablelib/0/plugins/Selection.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/ResizableHeader" src="./tablelib/0/plugins/ResizableHeader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/SmartTooltips" src="./tablelib/0/plugins/SmartTooltips.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/StickyHeader" src="./tablelib/0/plugins/StickyHeader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/StickyScrollbar" src="./tablelib/0/plugins/StickyScrollbar.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/RowEvents" src="./tablelib/0/plugins/RowEvents.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/SortableHeader" src="./tablelib/0/plugins/SortableHeader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/FixedHeader" src="./tablelib/0/plugins/FixedHeader.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="jscore/ext/net" src="./jscore/1/ext/net.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/InfoPopup" src="./widgets/1/InfoPopup.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/SelectBox" src="./widgets/1/SelectBox.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/MultiSelectBox" src="./widgets/1/MultiSelectBox.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/Combobox" src="./widgets/1/Combobox.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/ComboMultiSelect" src="./widgets/1/ComboMultiSelect.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/Switcher" src="./widgets/1/Switcher.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/Spinner" src="./widgets/1/Spinner.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/PopupDatePicker" src="./widgets/1/PopupDatePicker.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="eso-commonlib/RawMessageCell" src="./eso-commonlib/1/RawMessageCell.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/HeaderCell" src="./tablelib/0/HeaderCell.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/Row" src="./tablelib/0/Row.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/Table" src="./tablelib/0/Table.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/plugins/PinColumns" src="./tablelib/0/plugins/PinColumns.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/Pagination" src="./widgets/1/Pagination.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/DatePicker" src="./widgets/1/DatePicker.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/TimePicker" src="./widgets/1/TimePicker.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/utils/datePickerUtils" src="./widgets/1/utils/datePickerUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="widgets/utils/dataNameUtils" src="./widgets/1/utils/dataNameUtils.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="i18n/AdvancedDateTime" src="./i18n/2/AdvancedDateTime.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="sap-decision-rules" data-requiremodule="tablelib/config" src="./tablelib/0/config.js"></script><style> .elEsoCommonlib-wRefresh-QuickActionBar-commands {
+  position: relative;
+  top: 5px;
+}
+.elEsoCommonlib-wRefresh-textHolder {
+  cursor: pointer;
+  margin-left: 22px;
+  margin-right: 10px;
+  position: relative;
+  bottom: 3px;
+}
+</style><style> .eaSapDecisionRules-rList-inlineMessageHolder {
+  padding-top: 20px;
+  display: none;
+}
+.eaSapDecisionRules-rList-noTemplatesMessageHolder {
+  padding-top: 20px;
+  display: none;
+}
+.eaSapDecisionRules-rList-lastRefreshedHolder {
+  padding-top: 5px;
+}
+</style><style>.elLayouts {
+  /* Firefox &lt; 16 */
+
+  /* Safari, Chrome and Opera &gt; 12.1 */
+
+  /* Internet Explorer */
+
+  /* Opera &lt; 12.1 */
+
+}
+.elLayouts-clearFix {
+  clear: both;
+}
+.elLayouts-Wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.elLayouts-Wrapper-backToTop {
+  z-index: 1;
+  position: fixed;
+  border: solid 1px #ccc;
+  background: #efefef;
+  padding: 5px;
+  box-shadow: 0 0 3px #ccc;
+  border-radius: 5px;
+  bottom: -30px;
+  opacity: 0;
+  right: 55px;
+  cursor: pointer;
+  -webkit-transition: bottom 0.5s, opacity 0.3s, right 0.6s ease-in-out;
+  transition: bottom 0.5s, opacity 0.3s, right 0.6s ease-in-out;
+}
+.elLayouts-Wrapper-backToTop_show_true {
+  bottom: 10px;
+  opacity: 1;
+  display: block;
+}
+.elLayouts-TopSection {
+  position: relative;
+  margin-left: 40px;
+  margin-right: 40px;
+  /*
+        this is a workaround for an issue found on iPad in
+        which the content disappears when scrolling
+        http://stackoverflow.com/a/21024100
+        */
+
+  z-index: 1;
+  display: block;
+  /* END */
+
+}
+@media screen and (max-width: 768px) {
+  .elLayouts-TopSection {
+    margin-left: 2.4rem;
+    margin-right: 2.4rem;
+  }
+}
+@media screen and (max-width: 480px) {
+  .elLayouts-TopSection {
+    margin-left: 1.2rem;
+    margin-right: 1.2rem;
+  }
+}
+.elLayouts-AppHeading {
+  margin-bottom: 12px;
+}
+.elLayouts-QuickActionBar {
+  position: relative;
+  height: 32px;
+}
+.elLayouts-QuickActionBar-loader {
+  display: none;
+  margin: 8px;
+  -webkit-animation: elLayouts-fadein 1s;
+  /* Safari, Chrome and Opera &gt; 12.1 */
+
+  animation: elLayouts-fadein 1s;
+}
+.elLayouts-QuickActionBar_loading .elLayouts-QuickActionBar-defaultCommands,
+.elLayouts-QuickActionBar_loading .elLayouts-QuickActionBar-contextCommands {
+  display: none;
+}
+.elLayouts-QuickActionBar_loading .elLayouts-QuickActionBar-loader {
+  display: block;
+}
+.elLayouts-QuickActionBar_position_fixed {
+  position: fixed;
+  top: 45px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  width: 100%;
+  max-width: 100%;
+}
+.elLayouts-QuickActionBar_position_fixed .elLayouts-QuickActionBar-contents {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  border-radius: 0px;
+  border-bottom: 1px solid #CCCCCC;
+}
+.elLayouts-QuickActionBar-contents {
+  height: 32px;
+  padding: 0.4rem 0;
+  background-color: #e8e8e8;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  box-sizing: border-box;
+  -webkit-transition: background-color 0.1s ease-in;
+  transition: background-color 0.1s ease-in;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+}
+.elLayouts-QuickActionBar-center {
+  overflow: hidden;
+}
+.elLayouts-QuickActionBar-defaultCommands {
+  opacity: 1;
+  -webkit-transition: opacity 0.1s linear, transform 0.1s linear;
+  transition: opacity 0.1s linear, transform 0.1s linear;
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+  z-index: 1;
+}
+.elLayouts-QuickActionBar-contextCommands {
+  opacity: 0;
+  -webkit-transform: translateY(4px);
+  transform: translateY(4px);
+  -webkit-transition: opacity 0.1s linear, transform 0.1s linear;
+  transition: opacity 0.1s linear, transform 0.1s linear;
+}
+.elLayouts-QuickActionBar_context .elLayouts-QuickActionBar-contents {
+  background-color: #f3f3f3;
+  border-bottom: 2px solid #65cbe5;
+  box-sizing: border-box;
+  height: 32px;
+}
+.elLayouts-QuickActionBar_context .elLayouts-QuickActionBar-defaultCommands {
+  opacity: 0;
+  -webkit-transform: translateY(-4px);
+  transform: translateY(-4px);
+  z-index: auto;
+}
+.elLayouts-QuickActionBar_context .elLayouts-QuickActionBar-contextCommands {
+  opacity: 1;
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+  z-index: 1;
+}
+.elLayouts-QuickActionBar_context:after {
+  content: "";
+  width: calc(100% - 6px);
+  height: 2px;
+  margin: 30px 0 0 3px;
+  display: block;
+  position: absolute;
+  border-radius: 2px;
+  z-index: -1;
+}
+.elLayouts-QuickActionBar-iconHolder {
+  display: inline-block;
+  vertical-align: middle;
+  height: 1.6rem;
+}
+.elLayouts-QuickActionBar-separator {
+  display: inline-block;
+  vertical-align: middle;
+  border-left: 1px solid #CCCCCC;
+  margin: 0;
+  height: 2.4rem;
+}
+.elLayouts-QuickActionBar-breadcrumb {
+  height: 2.4rem;
+  float: left;
+}
+.elLayouts-QuickActionBar-commands {
+  display: inline-block;
+  margin: 0;
+  position: absolute;
+}
+.elLayouts-QuickActionBar-commands-separator {
+  display: inline-block;
+  vertical-align: middle;
+  border-left: 1px solid #CCCCCC;
+  margin: 0 8px;
+  height: 2.4rem;
+}
+.elLayouts-QuickActionBar-commandsBlock {
+  vertical-align: middle;
+  display: inline-block;
+}
+.elLayouts-QuickActionBar-commands_show_false {
+  display: none;
+}
+.elLayouts-QuickActionBar-left,
+.elLayouts-QuickActionBar-leftSeparator {
+  float: left;
+  height: 100%;
+}
+.elLayouts-QuickActionBar-left:empty ~ .elLayouts-QuickActionBar-leftSeparator,
+.elLayouts-QuickActionBar-right:empty ~ .elLayouts-QuickActionBar-rightSeparator {
+  display: none;
+}
+.elLayouts-QuickActionBar-right,
+.elLayouts-QuickActionBar-rightSeparator {
+  float: right;
+  height: 100%;
+}
+.elLayouts-QuickActionBar-left:not(:empty) {
+  margin-left: 5px;
+}
+.elLayouts-QuickActionBar-right {
+  margin-right: 5px;
+}
+@keyframes elLayouts-fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-moz-keyframes elLayouts-fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes elLayouts-fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-ms-keyframes elLayouts-fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-o-keyframes elLayouts-fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes elLayouts-fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-moz-keyframes elLayouts-fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes elLayouts-fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-ms-keyframes elLayouts-fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-o-keyframes elLayouts-fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+</style><style>.elLayouts-ActionBarBreadcrumb {
+  position: relative;
+  display: inline-block;
+  margin-left: 0;
+  height: 2.45rem;
+  width: 0;
+  float: left;
+  -webkit-transition: none;
+  transition: none;
+}
+.elLayouts-ActionBarBreadcrumb_show_true {
+  width: 2.45rem;
+  margin-left: 0.4rem;
+  -webkit-transition: margin-left 0.1s, width 0.1s;
+  transition: margin-left 0.1s, width 0.1s;
+}
+.elLayouts-ActionBarBreadcrumb-button {
+  position: relative;
+  background: url("layouts/1/resources/layouts/top_section/action_bar_breadcrumb/breadcrumbDropdown.svg") no-repeat center;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  border-radius: 1.2rem;
+  opacity: .8;
+}
+.elLayouts-ActionBarBreadcrumb-button:hover {
+  opacity: 1;
+}
+</style><style>.elWidgets-ComponentList {
+  z-index: 1500;
+}
+.elWidgets-ComponentList_animated {
+  opacity: 0;
+  transition: opacity .3s;
+}
+.elWidgets-ComponentList_show {
+  opacity: 1;
+}
+</style><style>.elWidgets-ComponentList-list_border_none {
+  border: none;
+  margin: 0;
+  box-shadow: none;
+}
+</style><style>.elLayouts-QuickActionBar-items {
+  position: relative;
+  white-space: nowrap;
+}
+.elLayouts-QuickActionBar-items_fadeIn {
+  -webkit-animation: elLayouts-fadein 0.5s;
+  /* Safari, Chrome and Opera &gt; 12.1 */
+
+  animation: elLayouts-fadein 0.5s;
+}
+.elLayouts-QuickActionBar-items_fadeout {
+  -webkit-animation: elLayouts-fadeout 0.2s;
+  /* Safari, Chrome and Opera &gt; 12.1 */
+
+  animation: elLayouts-fadeout 0.2s;
+}
+</style><style>.elLayouts-ActionBarButton {
+  margin: 0 6px;
+  white-space: nowrap;
+}
+.elLayouts-ActionBarButton-text {
+  vertical-align: middle;
+}
+.elLayouts-ActionBarButton-text:last-child {
+  margin-left: 3px;
+}
+.elLayouts-ActionBarButton-text:first-child {
+  margin-right: 3px;
+}
+</style><style>.elWidgets-Dropdown-leftIcon {
+  display: none;
+}
+.elWidgets-Dropdown-leftIcon_show {
+  display: inline-block;
+}
+.elWidgets-Dropdown-iconHolder {
+  vertical-align: top;
+}
+</style><style>.elLayouts-ActionBarDropdown {
+  padding: 0 6px;
+  display: inline;
+  white-space: nowrap;
+  vertical-align: top;
+  margin-top: -1px;
+}
+</style><style>.elLayouts-actionBarSeparator {
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: middle;
+  width: 1px;
+  height: 24px;
+  background-color: #CCC;
+  margin: 0 6px;
+  font-size: 2.4rem;
+}
+</style><style>.elTablelib-lPaginatedTable {
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 8px 0;
+}
+.elTablelib-lPaginatedTable-header {
+  position: relative;
+  border-bottom: 1px solid #333;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+.elTablelib-lPaginatedTable-headerText {
+  padding-right: 8px;
+  width: calc(100% - 68px);
+}
+.elTablelib-lPaginatedTable-headerText .elTablelib-lPaginatedTable-name {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  font-size: 20px;
+  line-height: 24px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-right: 12px;
+}
+.elTablelib-lPaginatedTable-headerText .elTablelib-lPaginatedTable-info {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  padding-top: 4px;
+  padding-right: 8px;
+  font-size: 12px;
+  line-height: 16px;
+}
+.elTablelib-lPaginatedTable-headerText .elTablelib-lPaginatedTable-infoPaging,
+.elTablelib-lPaginatedTable-headerText .elTablelib-lPaginatedTable-infoSelected {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+.elTablelib-lPaginatedTable-headerText .elTablelib-lPaginatedTable-infoPaging {
+  position: relative;
+  padding-right: 16px;
+}
+.elTablelib-lPaginatedTable-headerText .elTablelib-lPaginatedTable-infoPaging:after {
+  position: absolute;
+  right: 8px;
+  top: 2px;
+  bottom: 2px;
+  width: 1px;
+  background-color: #333333;
+  content: '';
+}
+@media (min-width: 1024px) {
+  .elTablelib-lPaginatedTable-headerText .elTablelib-lPaginatedTable-name,
+  .elTablelib-lPaginatedTable-headerText .elTablelib-lPaginatedTable-infoHolder {
+    padding-top: 0;
+    display: inline-block;
+    vertical-align: middle;
+    box-sizing: border-box;
+  }
+}
+.elTablelib-lPaginatedTable-headerActions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.elTablelib-lPaginatedTable-headerActions .elTablelib-lPaginatedTable-action {
+  display: inline-block;
+  padding-right: 4px;
+}
+.elTablelib-lPaginatedTable-headerActions .elTablelib-lPaginatedTable-action:last-of-type {
+  padding-right: 0;
+}
+.elTablelib-lPaginatedTable-body {
+  height: calc(100% - 35px);
+  min-height: 250px;
+}
+.elTablelib-lPaginatedTable-body .elTablelib-lPaginatedTable-notificationHolder {
+  padding: 8px 0;
+}
+.elTablelib-lPaginatedTable-body .elTablelib-lPaginatedTable-notificationHolder:empty {
+  display: none;
+}
+.elTablelib-lPaginatedTable-footer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 0;
+}
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-paginationHolder,
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-pageSizeSelectLabel,
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-pageSizeSelectHolder {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-paginationHolder {
+  flex-grow: 0;
+  flex-shrink: 1;
+  padding-bottom: 4px;
+  margin-right: 8px;
+  padding-right: 8px;
+}
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-paginationHolder_fullWidth {
+  max-width: 500px;
+  margin-right: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-paginationHolder_fullWidth:after {
+  display: none;
+}
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-paginationHolder:after {
+  position: absolute;
+  right: 8px;
+  top: 2px;
+  bottom: 2px;
+  width: 2px;
+  background-color: #e6e6e6;
+  content: '';
+}
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-paginationHolder:empty,
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-paginationHolder:empty:after {
+  display: none;
+}
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-pageSizeSelect {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+}
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-pageSizeSelectLabel {
+  max-width: calc(100% - 100px);
+  padding-right: 8px;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.elTablelib-lPaginatedTable-footer .elTablelib-lPaginatedTable-pageSizeSelectHolder {
+  width: 100px;
+}
+@media (min-width: 768px) {
+  
+}
+</style><style>.elTablelib-lTableHeader {
+  position: relative;
+  border-bottom: 1px solid #333;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+.elTablelib-lTableHeader-header {
+  padding-right: 8px;
+  width: calc(100% - 68px);
+}
+.elTablelib-lTableHeader-header .elTablelib-lTableHeader-title {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  font-size: 20px;
+  line-height: 24px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-right: 12px;
+  max-width: 100%;
+}
+.elTablelib-lTableHeader-header .elTablelib-lTableHeader-infoHolder {
+  padding-top: 4px;
+  padding-right: 8px;
+}
+@media (min-width: 1024px) {
+  .elTablelib-lTableHeader-header .elTablelib-lTableHeader-title,
+  .elTablelib-lTableHeader-header .elTablelib-lTableHeader-infoHolder {
+    display: inline-block;
+    vertical-align: middle;
+    box-sizing: border-box;
+  }
+}
+.elTablelib-lTableHeader-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.elTablelib-lTableHeader-actions .elTablelib-lTableHeader-action {
+  display: inline-block;
+  padding-right: 4px;
+}
+.elTablelib-lTableHeader-actions .elTablelib-lTableHeader-action:last-of-type {
+  padding-right: 0;
+}
+</style><style>.elWidgets-Loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1500;
+}
+.elWidgets-Loader-overlay {
+  background-color: rgba(256, 256, 256, 0.8);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.elWidgets-Loader-content {
+  text-align: center;
+  position: absolute;
+  left: calc(50% - 28px);
+  top: calc(50% - 8px);
+}
+</style><style>.elLayouts-Form-Field {
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+.elLayouts-Form-Field-content {
+  display: inline-block;
+  vertical-align: top;
+  max-width: 100%;
+}
+.elLayouts-Form-Field-before:not(:empty),
+.elLayouts-Form-Field-after:not(:empty) {
+  color: #a4a4a4;
+  padding: 4px 0;
+}
+.elLayouts-Form-Field-add {
+  margin-top: 5px;
+}
+.elLayouts-Form-Field-body:not(:empty) + .elLayouts-Form-Field-add {
+  margin-top: 10px;
+}
+.elLayouts-Form-Field-label {
+  vertical-align: top;
+  max-width: 100%;
+  display: inline-block;
+}
+.elLayouts-Form-Field-labelText,
+.elLayouts-Form-Field-labelInfo,
+.elLayouts-Form-Field-labelMenu {
+  display: inline-block;
+  vertical-align: top;
+}
+.elLayouts-Form-Field-labelText {
+  line-height: 24px;
+  height: 24px;
+}
+.elLayouts-Form-Field-labelInfo {
+  opacity: 0;
+  width: 0;
+  margin-top: 4px;
+  margin-left: 4px;
+}
+.elLayouts-Form-Field-labelRequired::after {
+  display: inline-block;
+  width: 0.5rem;
+  line-height: 24px;
+  margin: 0 0 0 0.1rem;
+  vertical-align: top;
+  color: #e32119;
+  content: '*';
+}
+.elLayouts-Form-Field:hover .elLayouts-Form-Field-labelInfo,
+.elLayouts-Form-Field_showInfo .elLayouts-Form-Field-labelInfo,
+.elLayouts-Form-Field_alwaysShowInfo .elLayouts-Form-Field-labelInfo {
+  opacity: 1;
+  width: auto;
+}
+.elLayouts-Form-Field_vertical .elLayouts-Form-Field-content,
+.elLayouts-Form-Field_vertical .elLayouts-Form-Fieldlabel {
+  display: block;
+}
+.elLayouts-Form_noneditable .elLayouts-Form-Field-labelText {
+  height: 20px;
+  line-height: 20px;
+}
+.elLayouts-Form_noneditable .elLayouts-Form-Field-labelInfo {
+  margin-top: 2px;
+}
+.elLayouts-Form_noneditable .elLayouts-Form-Field-labelRequired:after {
+  line-height: 20px;
+}
+</style><style>.elLayouts-Form-FieldBody-body,
+.elLayouts-Form-FieldBody-delete {
+  display: inline-block;
+  vertical-align: middle;
+}
+.elLayouts-Form-FieldBody-body {
+  max-width: 100%;
+}
+.elLayouts-Form-FieldBody:not(:last-child):not(.elLayouts-Form-FieldBody_noneditable) {
+  margin-bottom: 5px;
+}
+.elLayouts-Form-FieldBody-delete {
+  vertical-align: top;
+  margin-top: 4px;
+}
+/* This style here is for allowing the delete button to not overflow outside the screen on smaller screens. */
+.elLayouts-Form-Field_vertical[data-repeatable] .elLayouts-Form-FieldBody-body {
+  max-width: calc(100% - 20px);
+}
+</style><style>.elLayouts-Form-Struct-add {
+  margin-bottom: 4px;
+}
+</style><style>.elLayouts-Form-StructBody {
+  margin-bottom: 10px;
+}
+.elLayouts-Form-StructBody-body {
+  max-height: 0;
+  overflow: hidden;
+  margin-left: 7px;
+  padding-left: 13px;
+  transition: max-height 0.3s ease-in-out;
+  border-left: 1px solid #ccc;
+}
+.elLayouts-Form-StructBody-body &gt; .elLayouts-Form-Render {
+  margin-top: 10px;
+}
+.elLayouts-Form-StructBody-header {
+  cursor: pointer;
+  display: inline-block;
+  line-height: 24px;
+}
+.elLayouts-Form-StructBody-headerLabel,
+.elLayouts-Form-StructBody-delete {
+  display: inline-block;
+}
+.elLayouts-Form-StructBody-headerExpander {
+  display: inline-block;
+}
+.elLayouts-Form-StructBody-headerExpanderIcon:last-child {
+  display: none;
+}
+.elLayouts-Form-StructBody-header_expanded .elLayouts-Form-StructBody-headerExpanderIcon:first-child {
+  display: none;
+}
+.elLayouts-Form-StructBody-header_expanded .elLayouts-Form-StructBody-headerExpanderIcon:last-child {
+  display: inline-block;
+}
+</style><style>.elTablelib-Table {
+  position: relative;
+  overflow: hidden;
+}
+.elTablelib-Table-table {
+  width: 100%;
+}
+.elTablelib-Table_quickFilter_hidden .elTablelib-QuickFilter,
+.elTablelib-Table_quickFilter_hidden .elTablelib-QuickFilterCell-content {
+  height: 0 !important;
+}
+.elTablelib-Table_quickFilter_hidden .elTablelib-QuickFilterCell {
+  border-color: transparent;
+  transition: border-color 250ms ease;
+}
+.elTablelib-Table .elTablelib-QuickFilter {
+  box-sizing: border-box;
+}
+.elTablelib-Table .elTablelib-QuickFilter,
+.elTablelib-Table .elTablelib-QuickFilterCell-content,
+.elTablelib-Table .elTablelib-QuickFilter_hidden .elTablelib-QuickFilterCell-content {
+  transition: height 250ms ease;
+}
+.elTablelib-Table .elTablelib-QuickFilterCell {
+  padding: 0;
+}
+.elTablelib-Table .elTablelib-QuickFilterCell-content {
+  display: block;
+  height: 32px;
+  box-sizing: border-box;
+}
+</style><style>.elTablelib-StickyScrollbarWidget {
+  position: fixed;
+  overflow-x: scroll;
+  bottom: 0;
+  z-index: 1000;
+}
+.elTablelib-StickyScrollbarWidget-fakeContent {
+  height: 1px;
+}
+</style><style>.elTablelib-CheckboxHeaderCell-wrap {
+  text-align: center;
+  width: 100%;
+  margin-left: -2px;
+}
+</style><style>.elTablelib-CheckboxCell-wrap {
+  text-align: center;
+  width: 100%;
+  margin-left: -2px;
+}
+</style><style>.elEsoCommonlib-wStatusText {
+  width: 100%;
+  padding: 10px 0px 10px 0px;
+}
+.elEsoCommonlib-wStatusText-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+.elEsoCommonlib-wStatusText-dot_noMargin {
+  margin-right: 0;
+}
+</style><style>.elTablelib-lTableInfo {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  font-size: 12px;
+  line-height: 16px;
+}
+.elTablelib-lTableInfo-item {
+  position: relative;
+  padding-right: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+.elTablelib-lTableInfo-item:after {
+  position: absolute;
+  right: 8px;
+  top: 2px;
+  bottom: 2px;
+  width: 1px;
+  background-color: #CCCCCC;
+  content: '';
+}
+.elTablelib-lTableInfo-item:last-of-type {
+  padding-right: 0;
+}
+.elTablelib-lTableInfo-item:last-of-type:after {
+  display: none;
+}
+.elTablelib-lTableInfo-item .elTablelib-lTableInfo-filterClear,
+.elTablelib-lTableInfo-item .elTablelib-lTableInfo-selectionClear {
+  cursor: pointer;
+}
+</style></head>
+<body class="">
+<div class="eaContainer-SystemBarHolder"><div class="eaContainer-SystemBar">
+    <div class="eaContainer-SystemBar-right"><div style="display: inline-block;"></div><div style="display: inline-block;"><div class="eaContextMenu"></div></div><div style="display: inline-block;"><div class="eaFlyout" style="display: none;">
+    <div class="eaFlyout-panel">
+        <span class="eaFlyout-panelCloseIcon ebIcon ebIcon_circleArrowRight"></span>
+        <h2 class="eaFlyout-panelHeader"></h2>
+        <div class="eaFlyout-panelContents eb_scrollbar"></div>
+    </div>
+</div></div><div style="display: inline-block;"><div class="eaContainer-SystemBarComponent" style="display: inline-block;"><div class="eaContainer-SystemBarComponent-body"><i class="eaContainer-SystemBarComponent-icon" style="background-image: url(&quot;helpbutton/resources/help.svg&quot;); display: inline-block;"></i><span class="eaContainer-SystemBarComponent-caption" style="display: inline-block;">Help</span><i class="eaContainer-SystemBarComponent-arrow" style="display: inline-block;"></i></div><ul class="eaContainer-SystemBarComponent-list" style="display: none;"><li class="eaContainer-SystemBarComponent-listItem"><a class="eaContainer-SystemBarComponent-listItemAnchor" href="#help/app/sap-decision-rules" target="_blank">App Help</a></li></ul></div></div><div style="display: inline-block;"><div class="eaContainer-SystemBarComponent"><div class="eaContainer-SystemBarComponent-body"><i class="eaContainer-SystemBarComponent-icon" style="background-image: url(&quot;sap-logout/resources/../resources/sap-logout/Logout.svg&quot;); display: inline-block;"></i><span class="eaContainer-SystemBarComponent-caption" style="display: inline-block;">Log Out</span><i class="eaContainer-SystemBarComponent-arrow" style="display:none"></i></div><ul class="eaContainer-SystemBarComponent-list"></ul></div></div><div class="eaContainer-SystemBarComponent eaContainer-SystemBarComponent_fixed eaContainer-CompactComponent" style="display: none;"><div class="eaContainer-SystemBarComponent-body"><i class="eaContainer-SystemBarComponent-icon" style="background-image: url(&quot;container/resources/container/menu.svg&quot;); display: inline-block;"></i><span class="eaContainer-SystemBarComponent-caption" style="display:none"></span><i class="eaContainer-SystemBarComponent-arrow" style="display:none"></i></div><ul class="eaContainer-SystemBarComponent-list"></ul></div></div>
+    <div class="eaContainer-SystemBar-left">
+        <a href="#sap-execution-log" tabindex="-1" class="eaContainer-SystemBar-logoAnchor"><div class="eaContainer-SystemBar-logo"></div></a>
+        <div class="eaContainer-SystemBar-name"><a href="#sap-execution-log" tabindex="-1" class="eaContainer-SystemBar-nameValue">Policy Framework</a></div>
+    </div>
+</div></div>
+<div class="eaNavigation">
+    <div class="eaNavigation-panel">
+        <div class="eaNavigation-panelContents">
+            <div class="eaNavigation-panel-header">
+                <a class="eaNavigation-panel-homeLink">
+                    <i class="eaNavigation-panel-homeIcon ebIcon"></i>
+                    <span class="eaNavigation-panel-homeText"></span>
+                </a>
+                <div class="eaNavigation-panel-separator"></div>
+            </div>
+            <div class="eaNavigation-panel-page eaNavigation-panel-page-main">
+                <div class="eaNavigation-panel-page-content"></div>
+                <div class="eaNavigation-panel-separator"></div>
+                <div class="eaNavigation-panel-footer">
+                    <div class="eaNavigation-panel-switch" style="display: none">
+                        <i class="eaNavigation-panel-switchIcon ebIcon ebIcon_circleArrowRight_white"></i>
+                        <span class="eaNavigation-panel-switchText"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="eaNavigation-panel-page eaNavigation-panel-page-side">
+                <div class="eaNavigation-panel-page-content">
+                    <div class="eaNavigation-panel-page-title"></div>
+                </div>
+                <div class="eaNavigation-panel-footer">
+                    <div class="eaNavigation-panel-separator"></div>
+                    <div class="eaNavigation-panel-switch">
+                        <i class="eaNavigation-panel-switchIcon ebIcon ebIcon_circleArrowLeft_white"></i>
+                        <span class="eaNavigation-panel-switchText"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="eaNavigation-button-holder eaNavigation-button-holder_showing">
+        <i class="eaNavigation-button ebIcon ebIcon_leftArrowLarge_white"></i>
+        <i class="eaNavigation-button ebIcon ebIcon_menu_white"></i>
+    </div>
+</div><div class="eaContainer-applicationHolder"><div style="position: relative; width: 100%; height: 100%;"><div class="elLayouts-Wrapper">
+    <div class="elLayouts-TopSection">
+        <div class="ebLayout-Navigation"><div class="ebBreadcrumbs" style="white-space: inherit;"><div class="ebBreadcrumbs-item">
+    <a href="#sap-execution-log" class="ebBreadcrumbs-link" title="" style="cursor:pointer;" tabindex="0">Policy Framework</a>
+    
+</div><div class="ebBreadcrumbs-item">
+    <a href="#sap-execution-log" class="ebBreadcrumbs-link" title="" style="cursor:pointer;" tabindex="0">Execution Log</a>
+    
+        <span class="ebBreadcrumbs-arrow" tabindex="0">
+            <i class="ebIcon ebIcon_small ebIcon_interactive ebIcon_downArrow_10px"></i>
+        </span>
+    <div class="ebBreadcrumbs-list">
+        <div class="ebComponentList">
+            
+            <a href="#sap-execution-log/sap-execution-log" class="ebComponentList-item ebComponentList-link" tabindex="-1">
+                <span class="ebComponentList-link" title="">Execution Log</span>
+            </a>
+            
+            <a href="#sap-execution-log/sap-decision-rules" class="ebComponentList-item ebComponentList-link ebComponentList-item_selected" tabindex="-1">
+                <span class="ebComponentList-link" title="">Decision Rules</span>
+            </a>
+            
+        </div>
+    </div>
+    
+</div><div class="ebBreadcrumbs-item">
+    <a href="#sap-execution-log/sap-decision-rules" class="ebBreadcrumbs-link" title="" style="cursor:pointer;" tabindex="-1">Decision Rules</a>
+    
+</div></div></div>
+        <div class="ebLayout-AppHeading elLayouts-AppHeading">
+            <h1 class="elLayouts-TopSection-title">Decision Rules</h1>
+        </div>
+        <div class="elLayouts-QuickActionBarWrapper" style="height: 32px;">
+            <div class="elLayouts-QuickActionBar elLayouts-QuickActionBar_position_relative" style="width: calc(100% - 0px);">
+                <div class="elLayouts-QuickActionBar-contents">
+                    <div class="elLayouts-QuickActionBar-breadcrumb"><div class="elLayouts-ActionBarBreadcrumb elLayouts-ActionBarBreadcrumb_show_false">
+    <div class="elLayouts-ActionBarBreadcrumb-button"></div>
+</div></div>
+                    <div class="elLayouts-QuickActionBar-left"><div class="elEsoCommonlib-wRefresh" style="display: inline;">    <div class="elEsoCommonlib-wRefresh-QuickActionBar-commands">        <a class="elEsoCommonlib-wRefresh-iconHolder">            <em class="elEsoCommonlib-wRefresh ebIcon ebIcon_refresh ebIcon_interactive" title="Refresh"></em>        </a>    </div></div></div>
+                    <div class="elLayouts-QuickActionBar-leftSeparator"><div class="elLayouts-actionBarSeparator"></div></div>
+                    <div class="elLayouts-QuickActionBar-right"></div>
+                    <div class="elLayouts-QuickActionBar-rightSeparator"><div class="elLayouts-actionBarSeparator"></div></div>
+                    <div class="elLayouts-QuickActionBar-center">
+                        <div class="elLayouts-QuickActionBar-commands elLayouts-QuickActionBar-defaultCommands" style="display: block;"><div class="elLayouts-QuickActionBar-items elLayouts-QuickActionBar-items_fadeIn" style="width: 1231px;"><button type="button" class="ebBtn ebBtn_color_blue elLayouts-ActionBarButton"><i class="ebIcon ebIcon_add_white  elLayouts-ActionBarButton-icon"></i><span class="elLayouts-ActionBarButton-text">Create</span></button></div></div>
+                        <div class="elLayouts-QuickActionBar-commands elLayouts-QuickActionBar-contextCommands" style="display: block;"></div>
+                        <div class="elLayouts-QuickActionBar-loader"><span class="ebLoader-Dots ebLoader-Dots_size_small"></span></div>
+                    </div>
+                    <div class="elLayouts-clearFix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="elLayouts-TopSection-placeholder"><div class="eaSapDecisionRules-rList">    <div class="eaSapDecisionRules-rList-lastRefreshedHolder"><div class="elEsoCommonlib-wLastRefreshedLabel ebText_disabled ebText_alternative" style="display: none;">    Last refreshed 30 seconds ago</div></div>    <div class="eaSapDecisionRules-rList-inlineMessageHolder"></div>    <div class="eaSapDecisionRules-rList-noTemplatesMessageHolder ebInlineMessage" style="display: none;">        <div class="ebInlineMessage-iconHolder"><em class="ebIcon ebIcon_infoMsgIndicator ebIcon_big"></em></div>        <div class="ebInlineMessage-contentHolder">            <div class="ebInlineMessage-header">No Decision Rules Found</div>            <div class="ebInlineMessage-separator"></div>            <div class="ebInlineMessage-description">                                Use <b>Create</b> button to add a Decision Rule            </div>        </div>    </div>    <div class="eaSapDecisionRules-rList-gridHolder"><div><div class="elTablelib-lPaginatedTable">
+    <div class="elTablelib-lPaginatedTable-headerHolder"><header class="elTablelib-lTableHeader">
+    <div class="elTablelib-lTableHeader-header">
+        <div class="elTablelib-lTableHeader-title">Rules</div>
+        <div class="elTablelib-lTableHeader-infoHolder"><div class="elTablelib-lTableInfo">
+    <div class="elTablelib-lTableInfo-item elTablelib-lTableInfo-paging">(1-1 of 1)</div>
+        <div class="elTablelib-lTableInfo-item elTablelib-lTableInfo-selected">Selected (0)</div>
+    </div></div>
+    </div><ul class="elTablelib-lTableHeader-actions">
+        <li class="elTablelib-lTableHeader-action">
+            <button class="ebBtn ebBtn_subtle elTablelib-lTableHeader-filter" title="Filter" style="display: inline-block;">
+                <i class="ebIcon ebIcon_filter"></i>
+            </button>
+        </li><li class="elTablelib-lTableHeader-action">
+            <button class="ebBtn ebBtn_subtle elTablelib-lTableHeader-settings" title="Table Settings" style="display: inline-block;">
+                <i class="ebIcon ebIcon_settings"></i>
+            </button>
+        </li>
+    </ul>
+</header></div>
+    <div class="elTablelib-lPaginatedTable-body" style="position: relative;">
+        <div class="elTablelib-lPaginatedTable-notificationHolder"></div>
+        <div class="elTablelib-lPaginatedTable-tableHolder"><div class="elTablelib-Table">
+    <div class="elTablelib-Table-pretable"><table class="ebTable elTablelib-Table-table ebTable_striped ebTable_hoverActive_none" style="background-color: white; width: 0px; position: absolute; z-index: 1000; overflow-y: hidden; top: 0px;"><colgroup><col style="width: 40px;" /><col style="width: 120px;" /><col style="width: 120px;" /><col style="width: 100px;" /><col style="width: 120px;" /><col style="width: 120px;" /><col style="width: 40px;" /><col style="width: 110px;" /><col style="width: 110px;" /><col style="width: 120px;" /><col style="width: 120px;" /><col style="width: 160px;" /><col style="width: 160px;" /><col style="width: 160px;" /><col style="width: 120px;" /><col style="width: 0px;" /></colgroup>
+<thead class="elTablelib-Table-header"><tr class="ebTableRow"><th style="box-sizing: border-box; white-space: nowrap !important" class="elTablelib-CheckboxHeaderCell ebTableCell">
+    <div class="elTablelib-CheckboxHeaderCell-wrap">
+        <input class="ebCheckbox" type="checkbox" value="1" />
+        <span class="ebCheckbox-inputStatus"></span>
+    </div>
+</th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Event Type</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+</th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Asset Type</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Status</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Tenant Name</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Meter Name</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Severity Evaluation</span>
+    <div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Severity</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Action</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Primary Action Count</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Time Lapse</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Alternative Action</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Creation Date</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down ebSort-arrow_active"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Last Update Date</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Created By</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th style="padding-left: 0px; padding-right: 0px; width: 0px; box-sizing: border-box; position: relative;" class="ebTableCell"><div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th></tr></thead></table></div>
+    <div class="elTablelib-Table-wrapper eb_scrollbar" style="max-width: 100%; width: 1284px;">
+        <table class="ebTable elTablelib-Table-table ebTable_striped ebTable_hoverActive_none" style="width: 0px;"><colgroup><col style="width: 40px;" /><col style="width: 120px;" /><col style="width: 120px;" /><col style="width: 100px;" /><col style="width: 120px;" /><col style="width: 120px;" /><col style="width: 40px;" /><col style="width: 110px;" /><col style="width: 110px;" /><col style="width: 120px;" /><col style="width: 120px;" /><col style="width: 160px;" /><col style="width: 160px;" /><col style="width: 160px;" /><col style="width: 120px;" /><col style="width: 0px;" /></colgroup>
+            
+            
+            <thead class="elTablelib-Table-header"><tr class="ebTableRow"><th style="box-sizing: border-box; white-space: nowrap !important" class="elTablelib-CheckboxHeaderCell ebTableCell">
+    <div class="elTablelib-CheckboxHeaderCell-wrap">
+        <input class="ebCheckbox" type="checkbox" value="1" />
+        <span class="ebCheckbox-inputStatus"></span>
+    </div>
+</th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Event Type</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+</th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Asset Type</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Status</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Tenant Name</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Meter Name</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Severity Evaluation</span>
+    <div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Severity</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Action</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Primary Action Count</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Time Lapse</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Alternative Action</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Creation Date</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Last Update Date</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th class="ebTableCell elTables-wrappedHeader ebTable-th_sortable ebTable-th_resizable" style="box-sizing: border-box; position: relative;">
+    <div class="ebTable-header">
+      <span class="ebTable-headerText">Created By</span>
+    <span class="ebTable-headerSort ebSort"><i class="ebSort-arrow_up"></i><i class="ebSort-arrow_down"></i></span><div class="ebTable-headerResize"></div></div>
+<div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th><th style="padding-left: 0px; padding-right: 0px; width: 0px; box-sizing: border-box; position: relative;" class="ebTableCell"><div class="elTablelib-headerResize" style="position: absolute; width: 10px; left: 0px; top: 0px; bottom: 0px; cursor: col-resize; user-select: none;"></div></th></tr></thead><tbody class="elTablelib-Table-body"><tr class="ebTableRow"><td class="elTablelib-CheckboxCell ebTableCell">
+    <div class="elTablelib-CheckboxCell-wrap">
+        <input class="ebCheckbox" type="checkbox" value="1" />
+        <span class="ebCheckbox-inputStatus"></span>
+    </div>
+</td><td class="ebTableCell">COMM</td><td class="ebTableCell">Host</td><div class="elEsoCommonlib-wStatusText ebTableCell">
+    <div class="elEsoCommonlib-wStatusText-dot ebBgColor_red" id="status"></div>
+        <span class="elEsoCommonlib-wStatusText-text" id="name">Inactive</span>
+</div><td class="ebTableCell"></td><td class="ebTableCell"></td><td class="ebTableCell"></td><td class="ebTableCell"></td><td class="ebTableCell">recreatevms</td><td class="ebTableCell"></td><td class="ebTableCell"></td><td class="ebTableCell"></td><td class="ebTableCell">2018-12-03 14:16:46</td><td class="ebTableCell"></td><td class="ebTableCell"></td><td style="padding-left:0;padding-right:0;width:0;" class="ebTableCell"></td></tr></tbody>
+        </table>
+    </div>
+    <div class="elTablelib-Table-posttable"></div>
+<div class="elTablelib-StickyScrollbarWidget eb_scrollbar" style="visibility: hidden; pointer-events: none;">
+    <div class="elTablelib-StickyScrollbarWidget-fakeContent"></div>
+</div></div></div>
+        <footer class="elTablelib-lPaginatedTable-footer">
+            <div class="elTablelib-lPaginatedTable-paginationHolder"></div><div class="elTablelib-lPaginatedTable-pageSizeSelect" style="display: none;">
+                <div class="elTablelib-lPaginatedTable-pageSizeSelectLabel" title="Show">Show</div><div class="elTablelib-lPaginatedTable-pageSizeSelectHolder"></div>
+            </div>
+        </footer>
+    </div>
+</div></div></div></div></div>
+    </div>
+    <div class="elLayouts-Wrapper-backToTop elLayouts-Wrapper-backToTop_show_false">
+        <i class="ebIcon ebIcon_upArrowLarge"></i>
+    </div>
+</div></div></div>
+<div class="eaContainer-Spinner" style=""><div class="eaContainer-LoaderAnimation">
+    <div class="eaContainer-LoaderAnimation-block"></div>
+    <div class="eaContainer-LoaderAnimation-block"></div>
+    <div class="eaContainer-LoaderAnimation-block"></div>
+</div></div>
+
+<script type="text/javascript">
+    var require = {
+        packages: [{
+            name: "jscore",
+            location: "jscore/1"
+        }, {
+            name: "i18n",
+            location: "i18n/2"
+        }]
+    };
+</script>
+<script src="container/require.js"></script>
+<script src="container/main.js"></script>
+
+
+<div class="ebDialog">
+    <div class="ebDialog-holder">
+        <div class="ebDialogBox" style="height: 100%;">
+            
+            <div class="ebDialogBox-icon">
+                <span class="ebDialog-topRightButton ebIcon ebIcon_close ebIcon_interactive" tabindex="0"></span>
+            </div>
+            
+            <div class="ebDialogBox-contentBlock">
+                <div class="ebDialogBox-content eb_scrollbar">
+                    
+                    <div class="ebDialogBox-primaryText">Create Decision Rule</div>
+                    <div class="ebDialogBox-secondaryText"><div class="eaSapDecisionRules-wDecisionRuleDialog"><div class="elLayouts-Form"><div class="elLayouts-Form-Render"><div class="elLayouts-Form-Field elLayouts-Form-Field_showInfo">
+    <div class="elLayouts-Form-Field-label" style="width: 153px;">
+        <div class="elLayouts-Form-Field-labelText elLayouts-Form-Field-labelRequired">Event Type</div>
+        <div class="elLayouts-Form-Field-labelInfo"><div class="ebInfoPopup">
+    <div class="ebInfoPopup-infoIcon" tabindex="0"><i class="ebIcon ebIcon_interactive ebIcon_medium ebIcon_info"></i></div>
+</div></div>
+        <div class="elLayouts-Form-Field-labelMenu"></div>
+    </div>
+    <div class="elLayouts-Form-Field-content">
+        <div class="elLayouts-Form-Field-before"></div>
+        <div class="elLayouts-Form-Field-body"><div class="elLayouts-Form-FieldBody" data-path="eventType" data-body="field">
+    <div class="elLayouts-Form-FieldBody-body"><div class="elLayouts-Form-select" style="width: 180px; max-width: 100%;"><div class="ebSelect ebSelect_width_full">
+    <button type="button" class="ebSelect-header">
+        <span class="ebSelect-value">PM</span>
+        <span class="ebSelect-iconHolder"><i class="ebIcon ebIcon_small ebIcon_downArrow_10px"></i></span>
+    </button>
+</div></div></div>
+    
+</div></div>
+        
+        <div class="elLayouts-Form-Field-after"></div>
+    </div>
+</div><div class="elLayouts-Form-Field">
+    <div class="elLayouts-Form-Field-label" style="width: 153px;">
+        <div class="elLayouts-Form-Field-labelText elLayouts-Form-Field-labelRequired">Asset Type</div>
+        <div class="elLayouts-Form-Field-labelInfo"><div class="ebInfoPopup">
+    <div class="ebInfoPopup-infoIcon" tabindex="0"><i class="ebIcon ebIcon_interactive ebIcon_medium ebIcon_info"></i></div>
+</div></div>
+        <div class="elLayouts-Form-Field-labelMenu"></div>
+    </div>
+    <div class="elLayouts-Form-Field-content">
+        <div class="elLayouts-Form-Field-before"></div>
+        <div class="elLayouts-Form-Field-body"><div class="elLayouts-Form-FieldBody" data-path="assetType" data-body="field">
+    <div class="elLayouts-Form-FieldBody-body"><div class="elLayouts-Form-select" style="width: 180px; max-width: 100%;"><div class="ebSelect ebSelect_width_full">
+    <button type="button" class="ebSelect-header">
+        <span class="ebSelect-value">VM</span>
+        <span class="ebSelect-iconHolder"><i class="ebIcon ebIcon_small ebIcon_downArrow_10px"></i></span>
+    </button>
+</div></div></div>
+    
+</div></div>
+        
+        <div class="elLayouts-Form-Field-after"></div>
+    </div>
+</div><div class="elLayouts-Form-Field">
+    <div class="elLayouts-Form-Field-label" style="width: 153px;">
+        <div class="elLayouts-Form-Field-labelText elLayouts-Form-Field-labelRequired">Tenant Name</div>
+        <div class="elLayouts-Form-Field-labelInfo"></div>
+        <div class="elLayouts-Form-Field-labelMenu"></div>
+    </div>
+    <div class="elLayouts-Form-Field-content">
+        <div class="elLayouts-Form-Field-before"></div>
+        <div class="elLayouts-Form-Field-body"><div class="elLayouts-Form-FieldBody" data-path="tenantName" data-body="field">
+    <div class="elLayouts-Form-FieldBody-body"><div class="elLayouts-Form-Text">
+    <input class="ebInput ebInput_width_full" style="width:180px;max-width:100%;" placeholder="xyz*, abc*" />
+<span class="ebFieldNotification ebFieldNotification_show_none">
+    <span class="ebFieldNotification-info"></span>
+    <span class="ebFieldNotification-ok"></span>
+    <span class="ebFieldNotification-warning"></span>
+    <span class="ebFieldNotification-error"></span>
+</span></div></div>
+    
+</div></div>
+        
+        <div class="elLayouts-Form-Field-after"></div>
+    </div>
+</div><div class="elLayouts-Form-Field">
+    <div class="elLayouts-Form-Field-label" style="width: 153px;">
+        <div class="elLayouts-Form-Field-labelText elLayouts-Form-Field-labelRequired">Meter Name</div>
+        <div class="elLayouts-Form-Field-labelInfo"></div>
+        <div class="elLayouts-Form-Field-labelMenu"></div>
+    </div>
+    <div class="elLayouts-Form-Field-content">
+        <div class="elLayouts-Form-Field-before"></div>
+        <div class="elLayouts-Form-Field-body"><div class="elLayouts-Form-FieldBody" data-path="meterName" data-body="field">
+    <div class="elLayouts-Form-FieldBody-body"><div class="elLayouts-Form-Text">
+    <input class="ebInput ebInput_width_full" style="width:180px;max-width:100%;" placeholder="cpu*, disk*" />
+<span class="ebFieldNotification ebFieldNotification_show_none">
+    <span class="ebFieldNotification-info"></span>
+    <span class="ebFieldNotification-ok"></span>
+    <span class="ebFieldNotification-warning"></span>
+    <span class="ebFieldNotification-error"></span>
+</span></div></div>
+    
+</div></div>
+        
+        <div class="elLayouts-Form-Field-after"></div>
+    </div>
+</div><div class="elLayouts-Form-Field">
+    <div class="elLayouts-Form-Field-label" style="width: 153px;">
+        <div class="elLayouts-Form-Field-labelText elLayouts-Form-Field-labelRequired">Severity Evaluation</div>
+        <div class="elLayouts-Form-Field-labelInfo"></div>
+        <div class="elLayouts-Form-Field-labelMenu"></div>
+    </div>
+    <div class="elLayouts-Form-Field-content">
+        <div class="elLayouts-Form-Field-before"></div>
+        <div class="elLayouts-Form-Field-body"><div class="elLayouts-Form-FieldBody" data-path="severityEvaluation" data-body="field">
+    <div class="elLayouts-Form-FieldBody-body"><div class="elLayouts-Form-select" style="width: 180px; max-width: 100%;"><div class="ebSelect ebSelect_width_full">
+    <button type="button" class="ebSelect-header">
+        <span class="ebSelect-value">Greater Than</span>
+        <span class="ebSelect-iconHolder"><i class="ebIcon ebIcon_small ebIcon_downArrow_10px"></i></span>
+    </button>
+</div></div></div>
+    
+</div></div>
+        
+        <div class="elLayouts-Form-Field-after"></div>
+    </div>
+</div><div class="elLayouts-Form-Field">
+    <div class="elLayouts-Form-Field-label" style="width: 153px;">
+        <div class="elLayouts-Form-Field-labelText elLayouts-Form-Field-labelRequired">Severity</div>
+        <div class="elLayouts-Form-Field-labelInfo"></div>
+        <div class="elLayouts-Form-Field-labelMenu"></div>
+    </div>
+    <div class="elLayouts-Form-Field-content">
+        <div class="elLayouts-Form-Field-before"></div>
+        <div class="elLayouts-Form-Field-body"><div class="elLayouts-Form-FieldBody" data-path="severity" data-body="field">
+    <div class="elLayouts-Form-FieldBody-body"><div class="elLayouts-Form-select" style="width: 180px; max-width: 100%;"><div class="ebSelect ebSelect_width_full">
+    <button type="button" class="ebSelect-header">
+        <span class="ebSelect-value">Warning</span>
+        <span class="ebSelect-iconHolder"><i class="ebIcon ebIcon_small ebIcon_downArrow_10px"></i></span>
+    </button>
+</div></div></div>
+    
+</div></div>
+        
+        <div class="elLayouts-Form-Field-after"></div>
+    </div>
+</div><div class="elLayouts-Form-Struct">
+    <div class="elLayouts-Form-Struct-body"><div class="elLayouts-Form-StructBody" data-path="primaryAction">
+    <div class="elLayouts-Form-StructBody-header elLayouts-Form-StructBody-header_expanded" tabindex="0">
+        <div class="elLayouts-Form-StructBody-headerExpander">
+            <i class="ebIcon ebIcon_rightArrow elLayouts-Form-StructBody-headerExpanderIcon"></i>
+            <i class="ebIcon ebIcon_downArrow elLayouts-Form-StructBody-headerExpanderIcon"></i>
+        </div>
+        <div class="elLayouts-Form-StructBody-headerLabel">Primary Action</div>
+        
+    </div>
+    <div class="elLayouts-Form-StructBody-body" style="max-height: inherit;">
+    <div class="elLayouts-Form-Render"><div class="elLayouts-Form-Field">
+    <div class="elLayouts-Form-Field-label" style="width: 83px;">
+        <div class="elLayouts-Form-Field-labelText elLayouts-Form-Field-labelRequired">Action</div>
+        <div class="elLayouts-Form-Field-labelInfo"><div class="ebInfoPopup">
+    <div class="ebInfoPopup-infoIcon" tabindex="0"><i class="ebIcon ebIcon_interactive ebIcon_medium ebIcon_info"></i></div>
+</div></div>
+        <div class="elLayouts-Form-Field-labelMenu"></div>
+    </div>
+    <div class="elLayouts-Form-Field-content">
+        <div class="elLayouts-Form-Field-before"></div>
+        <div class="elLayouts-Form-Field-body"><div class="elLayouts-Form-FieldBody" data-path="primaryAction.action" data-body="field">
+    <div class="elLayouts-Form-FieldBody-body"><div class="elLayouts-Form-select" style="width: 180px; max-width: 100%;"><div class="ebSelect ebSelect_width_full">
+    <button type="button" class="ebSelect-header">
+        <span class="ebSelect-value">restart</span>
+        <span class="ebSelect-iconHolder"><i class="ebIcon ebIcon_small ebIcon_downArrow_10px"></i></span>
+    </button>
+</div></div></div>
+    
+</div></div>
+        
+        <div class="elLayouts-Form-Field-after"></div>
+    </div>
+</div></div></div>
+</div></div>
+    <div class="elLayouts-Form-Struct-add"></div>
+</div><div class="elLayouts-Form-Struct">
+    <div class="elLayouts-Form-Struct-body"><div class="elLayouts-Form-StructBody" data-path="alternateAction">
+    <div class="elLayouts-Form-StructBody-header elLayouts-Form-StructBody-header_expanded" tabindex="0">
+        <div class="elLayouts-Form-StructBody-headerExpander">
+            <i class="ebIcon ebIcon_rightArrow elLayouts-Form-StructBody-headerExpanderIcon"></i>
+            <i class="ebIcon ebIcon_downArrow elLayouts-Form-StructBody-headerExpanderIcon"></i>
+        </div>
+        <div class="elLayouts-Form-StructBody-headerLabel">Alternative Action</div>
+        
+    </div>
+    <div class="elLayouts-Form-StructBody-body" style="max-height: inherit;">
+    <div class="elLayouts-Form-Render"><div class="elLayouts-Form-Field">
+    <div class="elLayouts-Form-Field-label" style="width: 166px;">
+        <div class="elLayouts-Form-Field-labelText ">Primary Action Count</div>
+        <div class="elLayouts-Form-Field-labelInfo"><div class="ebInfoPopup">
+    <div class="ebInfoPopup-infoIcon" tabindex="0"><i class="ebIcon ebIcon_interactive ebIcon_medium ebIcon_info"></i></div>
+</div></div>
+        <div class="elLayouts-Form-Field-labelMenu"></div>
+    </div>
+    <div class="elLayouts-Form-Field-content">
+        <div class="elLayouts-Form-Field-before"></div>
+        <div class="elLayouts-Form-Field-body"><div class="elLayouts-Form-FieldBody" data-path="alternateAction.primaryActionCount" data-body="field">
+    <div class="elLayouts-Form-FieldBody-body"><div class="elLayouts-Form-Text">
+    <input class="ebInput ebInput_width_full" style="width:180px;max-width:100%;" />
+<span class="ebFieldNotification ebFieldNotification_show_none">
+    <span class="ebFieldNotification-info"></span>
+    <span class="ebFieldNotification-ok"></span>
+    <span class="ebFieldNotification-warning"></span>
+    <span class="ebFieldNotification-error"></span>
+</span></div></div>
+    
+</div></div>
+        
+        <div class="elLayouts-Form-Field-after"></div>
+    </div>
+</div><div class="elLayouts-Form-Field">
+    <div class="elLayouts-Form-Field-label" style="width: 166px;">
+        <div class="elLayouts-Form-Field-labelText ">Time Lapse (minutes)</div>
+        <div class="elLayouts-Form-Field-labelInfo"><div class="ebInfoPopup">
+    <div class="ebInfoPopup-infoIcon" tabindex="0"><i class="ebIcon ebIcon_interactive ebIcon_medium ebIcon_info"></i></div>
+</div></div>
+        <div class="elLayouts-Form-Field-labelMenu"></div>
+    </div>
+    <div class="elLayouts-Form-Field-content">
+        <div class="elLayouts-Form-Field-before"></div>
+        <div class="elLayouts-Form-Field-body"><div class="elLayouts-Form-FieldBody" data-path="alternateAction.timeLapse" data-body="field">
+    <div class="elLayouts-Form-FieldBody-body"><div class="elLayouts-Form-Text">
+    <input class="ebInput ebInput_width_full" style="width:180px;max-width:100%;" />
+<span class="ebFieldNotification ebFieldNotification_show_none">
+    <span class="ebFieldNotification-info"></span>
+    <span class="ebFieldNotification-ok"></span>
+    <span class="ebFieldNotification-warning"></span>
+    <span class="ebFieldNotification-error"></span>
+</span></div></div>
+    
+</div></div>
+        
+        <div class="elLayouts-Form-Field-after"></div>
+    </div>
+</div><div class="elLayouts-Form-Field">
+    <div class="elLayouts-Form-Field-label" style="width: 166px;">
+        <div class="elLayouts-Form-Field-labelText ">Alternative Action</div>
+        <div class="elLayouts-Form-Field-labelInfo"></div>
+        <div class="elLayouts-Form-Field-labelMenu"></div>
+    </div>
+    <div class="elLayouts-Form-Field-content">
+        <div class="elLayouts-Form-Field-before"></div>
+        <div class="elLayouts-Form-Field-body"><div class="elLayouts-Form-FieldBody" data-path="alternateAction.alternativeAction" data-body="field">
+    <div class="elLayouts-Form-FieldBody-body"><div class="elLayouts-Form-select" style="width: 180px; max-width: 100%;"><div class="ebSelect ebSelect_width_full">
+    <button type="button" class="ebSelect-header">
+        <span class="ebSelect-value">Please select ...</span>
+        <span class="ebSelect-iconHolder"><i class="ebIcon ebIcon_small ebIcon_downArrow_10px"></i></span>
+    </button>
+</div></div></div>
+    
+</div></div>
+        
+        <div class="elLayouts-Form-Field-after"></div>
+    </div>
+</div></div></div>
+</div></div>
+    <div class="elLayouts-Form-Struct-add"></div>
+</div></div></div></div></div>
+                    
+                    
+                </div>
+            </div>
+            <div class="ebDialogBox-actionBlock">
+                
+                
+                
+            <button class="ebBtn ebBtn_color_darkBlue" type="button"><span class="ebBtn-caption">Save</span></button><button class="ebBtn ebBtn_color_darkBlue" type="button"><span class="ebBtn-caption">Activate</span></button><button class="ebBtn" type="button"><span class="ebBtn-caption">Cancel</span></button></div>
+        </div>
+    </div>
+</div></body></html>

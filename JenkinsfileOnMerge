@@ -1,0 +1,71 @@
+pipeline {
+    agent {
+        node {
+            label 'sa_slave'
+        }
+    }
+
+    environment {
+        GIT_CMD = "docker run --rm -v ${env.WORKSPACE}:/git alpine/git"
+        HELM_CMD = "docker run -v $HOME/.kube/config:/root/.kube/config -v ${env.WORKSPACE}/helm-home:/root/.helm -v ${env.WORKSPACE}:${env.WORKSPACE} linkyard/docker-helm:2.7.2"
+        IS_CI_SKIP = sh(script: "git log -1 | grep '\\[ci-skip\\]'", returnStatus: true)
+    }
+
+    stages {
+        stage('Clean') {
+            steps {
+                sh '${GIT_CMD} clean -xdff'
+                sh 'echo ${IS_CI_SKIP}'
+            }
+        }
+
+        stage('Prepare helm') {
+            when {
+                expression { env.IS_CI_SKIP != "0" }
+            }
+            steps {
+                sh 'sudo rm -rf helm-home'
+                sh 'mkdir helm-home'
+                sh '${HELM_CMD} init --client-only'
+                sh '${HELM_CMD} repo add baseline-repo https://arm.epk.ericsson.se/artifactory/proj-orchestration-sd-helm'
+                sh '${HELM_CMD} repo update'
+            }
+        }
+
+        stage('Increment Chart Version Locally') {
+            when {
+                expression { env.IS_CI_SKIP != "0" }
+            }
+            steps {
+                sh "sd-baseline/scripts/increment_chart_version.py --appChartDir=${env.WORKSPACE}/sd-baseline/charts/sd"
+            }
+        }
+
+        stage('Download Chart Requirements') {
+            when {
+                expression { env.IS_CI_SKIP != "0" }
+            }
+            steps {
+                sh "sd-baseline/scripts/download_chart_requirements.py --appChartDir=${env.WORKSPACE}/sd-baseline/charts/sd --helmCommand='${HELM_CMD}'"
+            }
+        }
+
+        stage('Commit Changes in Baseline Repo') {
+            when {
+                expression { env.IS_CI_SKIP != "0" }
+            }
+            steps {
+                sh "sd-baseline/scripts/commit_chart_changes.py --appChartDir=${env.WORKSPACE}/sd-baseline/charts/sd"
+            }
+        }
+
+        stage('Upload Chart to ARM') {
+            when {
+                expression { env.IS_CI_SKIP != "0" }
+            }
+            steps {
+                sh "python sd-baseline/scripts/uploadScript.py -w ${env.WORKSPACE} --repoRoot=${env.WORKSPACE}/sd-baseline/charts --appChartDir=sd --helm='${HELM_CMD}'"
+            }
+        }
+    }
+}

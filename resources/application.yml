@@ -1,0 +1,8 @@
+server:
+       port: 8080
+app:
+    sd:
+        team : Ericsson Solution Development Team
+        developer : sd developer
+        message : Implementation of a SD microservice
+        stub: true

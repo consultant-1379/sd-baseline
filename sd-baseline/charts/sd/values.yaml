@@ -1,0 +1,96 @@
+ingress:
+  enabled: true
+  hostname: ""
+  
+eric-log-transformer:
+  readinessProbe:
+    initialDelaySeconds: 120
+    periodSeconds: 15
+    timeoutSeconds: 15
+    failureThreshold: 24
+  livenessProbe:
+    initialDelaySeconds: 420
+    periodSeconds: 15
+    timeoutSeconds: 15
+    failureThreshold: 4
+
+eric-log-shipper:
+  additionalVolumeMounts: |
+    - name: varlibdocker
+      mountPath: /var/lib/docker/containers
+  additionalVolumes: |
+    - name: varlibdocker
+      hostPath:
+        path: /var/lib/docker/containers
+  logshipper:
+    consoleOutput: false
+    cfgData: |
+      paths:
+        - /var/lib/docker/containers/*/*.log
+      fields:
+        logplane: containerlogs
+  logtransformer:
+    host: eric-log-transformer
+    port: 5045
+    
+eric-data-search-engine:
+  master:
+    readinessProbe:
+      initialDelaySeconds: 120
+      periodSeconds: 10
+      failureThreshold: 36
+    livenessProbe:
+      initialDelaySeconds: 420
+      periodSeconds: 10
+      failureThreshold: 6
+  data:
+    storageAllocation: 10Gi
+
+eric-data-visualizer-kb:
+  ingress:
+    enabled: true
+    hosts: 
+      - ""
+
+erikube-rbd:
+  createSecret: true
+
+eric-data-coordinator-zk: 
+   persistantVolumeClaim:
+     storageClassName: default
+   heap: 500M 
+   memory: 1Gi 
+   volume: 
+     storage: 500M
+
+eric-data-message-bus-kf:
+  persistentVolumeClaim:
+    storageClassName: default
+  external_access:
+    enabled: true
+    extHostName: ""
+
+eric-data-document-database-pg:
+  postgresUser: "policynbi"
+  postgresPassword: "Edb_policy"
+  postgresDatabase: "policy_db"
+
+policynbi:
+  postgresql:
+    driverClass: org.postgresql.Driver
+    datasourceUrl: jdbc:postgresql://eric-data-document-database-pg:5432/policy_db
+    datasourceUsername: policynbi
+    datasourcePassword: Edb_policy
+
+ocwf-micro:
+  ecmConfig:
+    ecmUrl: ""
+    tenantId: ""
+    authHeader: ""
+    vmImageName: test_image
+  enmConfig:
+    url: ""
+    username: ""
+    password: ""
+
+
